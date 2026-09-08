@@ -18,7 +18,6 @@
       max-width: 960px;
       width: 100%;
     }
-    /* Tabs */
     .tab-nav {
       display: flex;
       gap: 0.5rem;
@@ -47,7 +46,6 @@
     .tab-content.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* Login */
     #loginPage {
       background: white; border-radius: 2rem; padding: 3rem 2.5rem;
       box-shadow: 0 20px 40px rgba(0,0,0,0.12); max-width: 520px; margin: 0 auto;
@@ -56,11 +54,11 @@
     #loginPage .sub { text-align: center; color: #5a6f84; margin-bottom: 2rem; font-size: 1rem; }
     .form-group { margin-bottom: 1.5rem; }
     .form-group label { display: block; font-weight: 600; color: #1f3857; margin-bottom: 0.4rem; font-size: 0.95rem; }
-    .form-group input, .form-group select {
+    .form-group input {
       width: 100%; padding: 0.8rem 1rem; border: 2px solid #d7e0eb; border-radius: 12px;
       font-size: 1rem; transition: 0.15s; font-family: inherit; background: white;
     }
-    .form-group input:focus, .form-group select:focus {
+    .form-group input:focus {
       outline: none; border-color: #1e3a5f; box-shadow: 0 0 0 3px rgba(30,58,95,0.15);
     }
     .form-group input[type="number"] {
@@ -80,9 +78,7 @@
     .btn-login:active { transform: translateY(4px); box-shadow: 0 0px 0 #0f283f; }
     .btn-login:disabled { background: #6a7f94; cursor: not-allowed; transform: none; box-shadow: 0 4px 0 #4a5a6a; }
     .error-msg { color: #b3363a; background: #ffe6e6; padding: 0.6rem 1rem; border-radius: 10px; font-size: 0.9rem; margin-top: 0.5rem; display: none; }
-    .success-msg { color: #155724; background: #d4edda; padding: 0.6rem 1rem; border-radius: 10px; font-size: 0.9rem; margin-top: 0.5rem; display: none; }
 
-    /* Puzzle */
     #puzzlePage {
       background: white; border-radius: 2.5rem 2.5rem 2rem 2rem;
       box-shadow: 0 20px 40px rgba(0,0,0,0.12); padding: 2rem 1.5rem 2.5rem;
@@ -94,7 +90,7 @@
     .header-row h1 { font-size: 1.8rem; font-weight: 500; color: #1e2b3c; }
     .header-row .timer {
       font-size: 1.8rem; font-weight: 700; background: #1e2b3c; color: white;
-      padding: 0.2rem 1.2rem; border-radius: 40px; letter-spacing: 2px; font-variant-numeric: tabular-nums;
+      padding: 0.2rem 1.2rem; border-radius: 40px; letter-spacing: 2px;
     }
     .user-badge { font-size: 0.9rem; color: #2a4057; background: #eef2f7; padding: 0.2rem 1.2rem; border-radius: 30px; display: inline-block; }
     .grid-container {
@@ -105,16 +101,13 @@
     .cell {
       aspect-ratio: 1/1; background: white; display: flex; flex-direction: column;
       align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 500;
-      color: #0a1a2b; position: relative; padding: 2px; transition: 0.1s ease;
+      color: #0a1a2b; position: relative; padding: 2px;
     }
     .cell .num {
       position: absolute; top: 2px; left: 5px; font-size: 0.55rem; font-weight: 700;
-      color: #1d3b5c; opacity: 0.8; line-height: 1;
+      color: #1d3b5c; opacity: 0.8;
     }
     .cell.block { background: #2c3e50; }
-    .cell.solved { background: #e6f0fa; color: #003366; font-weight: 600; box-shadow: inset 0 0 0 1px #8aa9d1; }
-    .cell.correct { background: #d4edda; box-shadow: inset 0 0 0 2px #28a745; }
-    .cell.wrong { background: #f8d7da; box-shadow: inset 0 0 0 2px #dc3545; }
     .cell input {
       width: 100%; height: 100%; border: none; background: transparent;
       text-align: center; font-size: 1.5rem; font-weight: 500; color: #0a1a2b;
@@ -139,7 +132,7 @@
     }
     .btn {
       border: none; padding: 0.6rem 1.8rem; border-radius: 40px; font-weight: 600;
-      font-size: 0.95rem; cursor: pointer; transition: 0.15s; letter-spacing: 0.3px;
+      font-size: 0.95rem; cursor: pointer; transition: 0.15s;
     }
     .btn-success { background: #1f7b4d; color: white; box-shadow: 0 3px 0 #0f4f2e; }
     .btn-success:hover { background: #289a60; transform: translateY(-2px); }
@@ -152,23 +145,15 @@
     }
     .status-msg.success { display: block; background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
     .status-msg.error { display: block; background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-    .status-msg.info { display: block; background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
 
-    /* Score display - hidden from participants */
-    .score-display {
-      display: none !important;
-    }
-
+    .score-display { display: none !important; }
     .footnote { margin-top: 1rem; font-size: 0.75rem; color: #4b6079; text-align: right; border-top: 1px solid #dce5ef; padding-top: 0.6rem; }
 
-    /* Leaderboard - Organizer only */
     #leaderboardPage {
       background: white; border-radius: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.12); padding: 2rem 1.5rem;
       display: none;
     }
-    #leaderboardPage.active {
-      display: block;
-    }
+    #leaderboardPage.active { display: block; }
     .lb-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; border-bottom: 3px solid #dce3ec; padding-bottom: 0.6rem; margin-bottom: 1.5rem; }
     .lb-header h1 { font-size: 1.8rem; font-weight: 500; color: #1e2b3c; }
     .lb-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
@@ -177,22 +162,16 @@
     .lb-stat-card .label { font-size: 0.85rem; color: #4a5f76; }
     .lb-table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid #eef2f7; }
     .lb-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-    .lb-table th { background: #f8faff; padding: 0.7rem 0.8rem; text-align: left; font-weight: 700; color: #1f3857; border-bottom: 2px solid #dce5ef; position: sticky; top: 0; }
+    .lb-table th { background: #f8faff; padding: 0.7rem 0.8rem; text-align: left; font-weight: 700; color: #1f3857; border-bottom: 2px solid #dce5ef; }
     .lb-table td { padding: 0.6rem 0.8rem; border-bottom: 1px solid #f0f2f5; }
-    .lb-table tr:hover td { background: #f8faff; }
     .lb-table .rank-col { font-weight: 700; width: 50px; text-align: center; }
-    .lb-table .top-score { background: #fffde7 !important; }
     .lb-refresh-btn { padding: 0.5rem 1.5rem; background: #1e3a5f; color: white; border: none; border-radius: 30px; cursor: pointer; font-weight: 600; transition: 0.2s; }
     .lb-refresh-btn:hover { background: #274b78; transform: translateY(-2px); }
-    .lb-refresh-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .lb-refresh-btn:disabled { opacity: 0.6; cursor: not-allowed; }
     .loading-spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid #eef2f7; border-radius: 50%; border-top-color: #1e3a5f; animation: spin 0.8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .no-data { text-align: center; padding: 2rem; color: #4a5f76; }
-
-    .org-toggle {
-      font-size: 0.7rem; color: #6a7f94; cursor: pointer; text-decoration: underline;
-      margin-left: 1rem; user-select: none;
-    }
+    .org-toggle { font-size: 0.7rem; color: #6a7f94; cursor: pointer; text-decoration: underline; margin-left: 1rem; user-select: none; }
     .org-toggle:hover { color: #1e3a5f; }
 
     @media (max-width: 600px) {
@@ -206,21 +185,18 @@
       .tab-btn { padding: 0.5rem 1rem; font-size: 0.85rem; }
       .lb-table { font-size: 0.75rem; }
       .lb-table th, .lb-table td { padding: 0.3rem 0.4rem; }
-      .lb-stats { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
 <body>
 <div class="container">
 
-  <!-- Tab Navigation -->
   <div class="tab-nav" id="tabNav" style="display:none;">
     <button class="tab-btn active" data-tab="puzzle">🧩 Crossword</button>
     <button class="tab-btn" data-tab="leaderboard" id="leaderboardTabBtn" style="display:none;">🏆 लीडरबोर्ड <span class="badge" id="lbBadge">0</span></button>
     <button class="tab-btn" data-tab="login" style="margin-left:auto;">🚪 लॉगआउट</button>
   </div>
 
-  <!-- Login -->
   <div id="loginPage">
     <h1>🧩 शब्द पहेली</h1>
     <p class="sub">व्यक्तिगत प्रतियोगिता · CROSSWORD 2026</p>
@@ -237,12 +213,12 @@
     
     <div class="form-group">
       <label for="userOffice">कार्यालय का नाम (Name of Office)</label>
-      <input type="text" id="userOffice" placeholder="जैसे: SBI मुख्य शाखा, कोषिकोड ...">
+      <input type="text" id="userOffice" placeholder="जैसे: SBI मुख्य शाखा">
     </div>
     
     <div class="form-group">
       <label for="userMobile">मोबाइल नंबर (Mobile Number)</label>
-      <input type="tel" id="userMobile" placeholder="उदा. 9876543210" pattern="[0-9]{10}" maxlength="10">
+      <input type="tel" id="userMobile" placeholder="उदा. 9876543210" maxlength="10">
     </div>
     
     <div class="form-group">
@@ -251,14 +227,12 @@
     </div>
     
     <div id="loginError" class="error-msg"></div>
-    <div id="loginSuccess" class="success-msg"></div>
     <button class="btn-login" id="loginBtn">▶ शुरू करें</button>
     <div style="margin-top:1rem; text-align:right;">
       <span class="org-toggle" id="orgToggle">🔒 आयोजक दृश्य</span>
     </div>
   </div>
 
-  <!-- Puzzle -->
   <div id="puzzlePage" class="tab-content active">
     <div class="header-row">
       <h1>🧩 शब्द पहेली</h1>
@@ -276,16 +250,7 @@
       <div class="clue-col" id="downClues"><h3>▼ नीचे (Down)</h3></div>
     </div>
 
-    <!-- Score display is hidden from participants via CSS -->
-    <div class="score-display" id="scoreDisplay">
-      <div>आपका स्कोर (Your Score)</div>
-      <div class="big-score" id="scoreValue">0 / 0</div>
-      <div style="font-size:0.9rem; margin-top:0.3rem;">
-        सही अक्षर (Correct Letters): <span id="correctLetters">0</span> | 
-        कुल अक्षर (Total Letters): <span id="totalLetters">0</span> | 
-        समय (Time): <span id="submissionDuration">0s</span>
-      </div>
-    </div>
+    <div class="score-display" id="scoreDisplay"></div>
 
     <div class="action-bar">
       <button class="btn btn-success" id="submitBtn">📤 सबमिट करें</button>
@@ -294,7 +259,6 @@
     <div class="footnote">* समय समाप्त होने पर स्वतः जमा · रोल नंबर केवल एक बार</div>
   </div>
 
-  <!-- Leaderboard - Organizer only -->
   <div id="leaderboardPage">
     <div class="lb-header">
       <h1>🏆 लीडरबोर्ड (आयोजक)</h1>
@@ -333,245 +297,444 @@
 </div>
 
 <script>
-  (function() {
-    // ========== CONFIG ==========
-    // IMPORTANT: Replace with your deployed Apps Script URL
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbzT8a-dgkOfVFgyNHEls7iOkfgOuPrq27nv0QG6OEM7e0U4JNLftsEGNIsf8AjzCNHW/exec';
+(function() {
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbzT8a-dgkOfVFgyNHEls7iOkfgOuPrq27nv0QG6OEM7e0U4JNLftsEGNIsf8AjzCNHW/exec';
 
-    // ========== CROSSWORD DATA ==========
-    const clues = {
-      across: [
-        { no: 1, text: "CHANGE (5)", answer: "परिवर्तन" },
-        { no: 2, text: "MATTER (3)", answer: "मामला" },
-        { no: 3, text: "PROFICIENT (3)", answer: "प्रवीण" },
-        { no: 4, text: "ACCORDINGLY (5)", answer: "तदनुसार" },
-        { no: 5, text: "PROOF (3)", answer: "प्रमाण" },
-        { no: 6, text: "STANDARD (3)", answer: "मानक" },
-        { no: 7, text: "APPROVAL (5)", answer: "अनुमोदन" },
-        { no: 15, text: "MORTGAGE (3)", answer: "बंधक" }
-      ],
-      down: [
-        { no: 8, text: "CUSTOM (3)", answer: "रिवाज़" },
-        { no: 9, text: "RENEWAL (5)", answer: "नवीकरण" },
-        { no: 10, text: "PROFIT (2)", answer: "लाभ" },
-        { no: 11, text: "AVERAGE (3)", answer: "औसत" },
-        { no: 12, text: "COMPLIANCE (5)", answer: "अनुपालन" },
-        { no: 13, text: "GENERAL (3)", answer: "सामान्य" },
-        { no: 14, text: "TEMPERATURE (4)", answer: "तापमान" },
-        { no: 4, text: "IMMEDIATE (3)", answer: "तत्काल" },
-        { no: 16, text: "INITIAL (4)", answer: "प्रारंभिक" }
-      ]
-    };
+  const clues = {
+    across: [
+      { no: 1, text: "CHANGE (5)", answer: "परिवर्तन" },
+      { no: 2, text: "MATTER (3)", answer: "मामला" },
+      { no: 3, text: "PROFICIENT (3)", answer: "प्रवीण" },
+      { no: 4, text: "ACCORDINGLY (5)", answer: "तदनुसार" },
+      { no: 5, text: "PROOF (3)", answer: "प्रमाण" },
+      { no: 6, text: "STANDARD (3)", answer: "मानक" },
+      { no: 7, text: "APPROVAL (5)", answer: "अनुमोदन" },
+      { no: 15, text: "MORTGAGE (3)", answer: "बंधक" }
+    ],
+    down: [
+      { no: 8, text: "CUSTOM (3)", answer: "रिवाज़" },
+      { no: 9, text: "RENEWAL (5)", answer: "नवीकरण" },
+      { no: 10, text: "PROFIT (2)", answer: "लाभ" },
+      { no: 11, text: "AVERAGE (3)", answer: "औसत" },
+      { no: 12, text: "COMPLIANCE (5)", answer: "अनुपालन" },
+      { no: 13, text: "GENERAL (3)", answer: "सामान्य" },
+      { no: 14, text: "TEMPERATURE (4)", answer: "तापमान" },
+      { no: 4, text: "IMMEDIATE (3)", answer: "तत्काल" },
+      { no: 16, text: "INITIAL (4)", answer: "प्रारंभिक" }
+    ]
+  };
 
-    const solvedGrid = [
-      ['प', 'रि', 'व', 'र्त', 'न', 'मा', 'म', 'ला'],
-      ['औ', 'वा', '', 'प्र', 'वी', 'ण', 'अ', 'भ'],
-      ['स', 'ज़', 'बं', 'ध', 'क', '', 'नु', 'प्रा'],
-      ['त', 'द', 'नु', 'सा', 'र', 'ता', 'पा', 'रं'],
-      ['त्का', '', 'प्र', 'मा', 'ण', 'प', 'ल', 'भि'],
-      ['ल', '', '', 'न्य', '', 'मा', 'न', 'क'],
-      ['', 'अ', 'नु', 'मो', 'द', 'न', '', '']
-    ];
+  const solvedGrid = [
+    ['प', 'रि', 'व', 'र्त', 'न', 'मा', 'म', 'ला'],
+    ['औ', 'वा', '', 'प्र', 'वी', 'ण', 'अ', 'भ'],
+    ['स', 'ज़', 'बं', 'ध', 'क', '', 'नु', 'प्रा'],
+    ['त', 'द', 'नु', 'सा', 'र', 'ता', 'पा', 'रं'],
+    ['त्का', '', 'प्र', 'मा', 'ण', 'प', 'ल', 'भि'],
+    ['ल', '', '', 'न्य', '', 'मा', 'न', 'क'],
+    ['', 'अ', 'नु', 'मो', 'द', 'न', '', '']
+  ];
 
-    const numberMap = {
-      '0,0': 1, '0,1': 8, '0,4': 9, '0,5': 2, '0,7': 10,
-      '1,0': 11, '1,3': 3, '1,6': 12,
-      '2,2': 15, '2,7': 16,
-      '3,0': 4, '3,3': 13, '3,5': 14,
-      '4,2': 5,
-      '5,5': 6,
-      '6,1': 7
-    };
+  const numberMap = {
+    '0,0': 1, '0,1': 8, '0,4': 9, '0,5': 2, '0,7': 10,
+    '1,0': 11, '1,3': 3, '1,6': 12,
+    '2,2': 15, '2,7': 16,
+    '3,0': 4, '3,3': 13, '3,5': 14,
+    '4,2': 5,
+    '5,5': 6,
+    '6,1': 7
+  };
 
-    const ROWS = 7, COLS = 8;
+  const ROWS = 7, COLS = 8;
+  let currentGrid = [];
+  let userName = '', userDesignation = '', userOffice = '', userMobile = '', userNumber = '';
+  let timerInterval = null;
+  let timeSeconds = 1800;
+  let isSubmitted = false, isTimerEnded = false;
+  let isOrganizer = false;
 
-    // ========== STATE ==========
-    let currentGrid = [];
-    let userName = '', userDesignation = '', userOffice = '', userMobile = '', userNumber = '';
-    let timerInterval = null;
-    let timeSeconds = 1800; // 30 मिनट
-    let isSubmitted = false, isTimerEnded = false;
-    let isOrganizer = false;
+  const loginPage = document.getElementById('loginPage');
+  const puzzlePage = document.getElementById('puzzlePage');
+  const leaderboardPage = document.getElementById('leaderboardPage');
+  const tabNav = document.getElementById('tabNav');
+  const leaderboardTabBtn = document.getElementById('leaderboardTabBtn');
+  const userNameInput = document.getElementById('userName');
+  const userDesignationInput = document.getElementById('userDesignation');
+  const userOfficeInput = document.getElementById('userOffice');
+  const userMobileInput = document.getElementById('userMobile');
+  const userNumberInput = document.getElementById('userNumber');
+  const loginError = document.getElementById('loginError');
+  const loginBtn = document.getElementById('loginBtn');
+  const userBadge = document.getElementById('userBadge');
+  const timerDisplay = document.getElementById('timerDisplay');
+  const gridContainer = document.getElementById('crosswordGrid');
+  const acrossContainer = document.getElementById('acrossClues');
+  const downContainer = document.getElementById('downClues');
+  const submitBtn = document.getElementById('submitBtn');
+  const statusMsg = document.getElementById('statusMsg');
+  const lbRefreshBtn = document.getElementById('lbRefreshBtn');
+  const lbTableBody = document.getElementById('lbTableBody');
+  const lbBadge = document.getElementById('lbBadge');
+  const lbTotal = document.getElementById('lbTotal');
+  const orgToggle = document.getElementById('orgToggle');
 
-    // ========== DOM REFS ==========
-    const loginPage = document.getElementById('loginPage');
-    const puzzlePage = document.getElementById('puzzlePage');
-    const leaderboardPage = document.getElementById('leaderboardPage');
-    const tabNav = document.getElementById('tabNav');
-    const leaderboardTabBtn = document.getElementById('leaderboardTabBtn');
-    const userNameInput = document.getElementById('userName');
-    const userDesignationInput = document.getElementById('userDesignation');
-    const userOfficeInput = document.getElementById('userOffice');
-    const userMobileInput = document.getElementById('userMobile');
-    const userNumberInput = document.getElementById('userNumber');
-    const loginError = document.getElementById('loginError');
-    const loginBtn = document.getElementById('loginBtn');
-    const userBadge = document.getElementById('userBadge');
-    const timerDisplay = document.getElementById('timerDisplay');
-    const gridContainer = document.getElementById('crosswordGrid');
-    const acrossContainer = document.getElementById('acrossClues');
-    const downContainer = document.getElementById('downClues');
-    const submitBtn = document.getElementById('submitBtn');
-    const statusMsg = document.getElementById('statusMsg');
-    const lbRefreshBtn = document.getElementById('lbRefreshBtn');
-    const lbTableBody = document.getElementById('lbTableBody');
-    const lbBadge = document.getElementById('lbBadge');
-    const lbTotal = document.getElementById('lbTotal');
-    const orgToggle = document.getElementById('orgToggle');
-
-    // ========== HELPERS ==========
-    function buildEmptyGrid() {
-      const grid = [];
-      for (let r = 0; r < ROWS; r++) {
-        const row = [];
-        for (let c = 0; c < COLS; c++) {
-          const isBlock = (solvedGrid[r] && solvedGrid[r][c] === '');
-          row.push({ value: '', block: isBlock, number: numberMap[`${r},${c}`] || null, row: r, col: c });
-        }
-        grid.push(row);
+  function buildEmptyGrid() {
+    const grid = [];
+    for (let r = 0; r < ROWS; r++) {
+      const row = [];
+      for (let c = 0; c < COLS; c++) {
+        const isBlock = (solvedGrid[r] && solvedGrid[r][c] === '');
+        row.push({ value: '', block: isBlock, number: numberMap[r+','+c] || null, row: r, col: c });
       }
-      return grid;
+      grid.push(row);
     }
+    return grid;
+  }
 
-    function renderClues() {
-      acrossContainer.innerHTML = '<h3>▶ आर-पार (Across)</h3>';
-      clues.across.forEach(clue => {
+  function renderClues() {
+    acrossContainer.innerHTML = '<h3>▶ आर-पार (Across)</h3>';
+    clues.across.forEach(clue => {
+      const div = document.createElement('div');
+      div.className = 'clue-item';
+      div.innerHTML = '<span class="clue-no">'+clue.no+'</span><span class="clue-text">'+clue.text+'</span>';
+      acrossContainer.appendChild(div);
+    });
+    downContainer.innerHTML = '<h3>▼ नीचे (Down)</h3>';
+    clues.down.forEach(clue => {
+      const div = document.createElement('div');
+      div.className = 'clue-item';
+      div.innerHTML = '<span class="clue-no">'+clue.no+'</span><span class="clue-text">'+clue.text+'</span>';
+      downContainer.appendChild(div);
+    });
+  }
+
+  function renderGrid() {
+    gridContainer.innerHTML = '';
+    for (let r = 0; r < ROWS; r++) {
+      for (let c = 0; c < COLS; c++) {
+        const cell = currentGrid[r][c];
         const div = document.createElement('div');
-        div.className = 'clue-item';
-        div.innerHTML = `<span class="clue-no">${clue.no}</span><span class="clue-text">${clue.text}</span>`;
-        acrossContainer.appendChild(div);
-      });
-      downContainer.innerHTML = '<h3>▼ नीचे (Down)</h3>';
-      clues.down.forEach(clue => {
-        const div = document.createElement('div');
-        div.className = 'clue-item';
-        div.innerHTML = `<span class="clue-no">${clue.no}</span><span class="clue-text">${clue.text}</span>`;
-        downContainer.appendChild(div);
-      });
-    }
-
-    function renderGrid() {
-      gridContainer.innerHTML = '';
-      for (let r = 0; r < ROWS; r++) {
-        for (let c = 0; c < COLS; c++) {
-          const cell = currentGrid[r][c];
-          const div = document.createElement('div');
-          div.className = 'cell';
-          if (cell.block) { div.classList.add('block'); } else {
-            if (cell.number) {
-              const numSpan = document.createElement('span');
-              numSpan.className = 'num';
-              numSpan.textContent = cell.number;
-              div.appendChild(numSpan);
-            }
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.maxLength = 6;
-            input.value = cell.value || '';
-            input.dataset.row = r;
-            input.dataset.col = c;
-            if (isSubmitted || isTimerEnded) input.disabled = true;
-            input.addEventListener('input', function(e) {
-              if (isSubmitted || isTimerEnded) return;
-              const val = this.value.trim();
-              cell.value = val;
-            });
-            div.appendChild(input);
+        div.className = 'cell';
+        if (cell.block) {
+          div.classList.add('block');
+        } else {
+          if (cell.number) {
+            const numSpan = document.createElement('span');
+            numSpan.className = 'num';
+            numSpan.textContent = cell.number;
+            div.appendChild(numSpan);
           }
-          gridContainer.appendChild(div);
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.maxLength = 6;
+          input.value = cell.value || '';
+          input.dataset.row = r;
+          input.dataset.col = c;
+          if (isSubmitted || isTimerEnded) input.disabled = true;
+          input.addEventListener('input', function(e) {
+            if (isSubmitted || isTimerEnded) return;
+            const val = this.value.trim();
+            cell.value = val;
+          });
+          div.appendChild(input);
+        }
+        gridContainer.appendChild(div);
+      }
+    }
+  }
+
+  function calculateScore() {
+    let correct = 0, total = 0;
+    for (let r = 0; r < ROWS; r++) {
+      for (let c = 0; c < COLS; c++) {
+        const cell = currentGrid[r][c];
+        if (!cell.block) {
+          total++;
+          if (cell.value.trim() === (solvedGrid[r][c] || '')) correct++;
         }
       }
     }
+    return { correct, total };
+  }
 
-    function calculateScore() {
-      let correct = 0, total = 0;
-      for (let r = 0; r < ROWS; r++) {
-        for (let c = 0; c < COLS; c++) {
-          const cell = currentGrid[r][c];
-          if (!cell.block) {
-            total++;
-            if (cell.value.trim() === (solvedGrid[r][c] || '')) correct++;
-          }
-        }
-      }
-      return { correct, total };
-    }
+  function showStatus(msg, type) {
+    statusMsg.textContent = msg;
+    statusMsg.className = 'status-msg ' + type;
+    statusMsg.style.display = 'block';
+  }
+  function hideStatus() { statusMsg.style.display = 'none'; }
 
-    function showStatus(msg, type = 'info') {
-      statusMsg.textContent = msg;
-      statusMsg.className = 'status-msg ' + type;
-      statusMsg.style.display = 'block';
-    }
-    function hideStatus() { statusMsg.style.display = 'none'; }
-
-    // ========== TIMER ==========
-    function startTimer() {
-      if (timerInterval) clearInterval(timerInterval);
-      timeSeconds = 1800;
+  function startTimer() {
+    if (timerInterval) clearInterval(timerInterval);
+    timeSeconds = 1800;
+    updateTimerDisplay();
+    timerInterval = setInterval(function() {
+      timeSeconds--;
       updateTimerDisplay();
-      timerInterval = setInterval(() => {
-        timeSeconds--;
-        updateTimerDisplay();
-        if (timeSeconds <= 0) {
-          clearInterval(timerInterval);
-          timerInterval = null;
-          isTimerEnded = true;
-          showStatus('⏰ समय समाप्त! स्वतः जमा किया जा रहा है...', 'error');
-          autoSubmit();
-        }
-      }, 1000);
-    }
-    function updateTimerDisplay() {
-      const mins = Math.floor(timeSeconds / 60);
-      const secs = timeSeconds % 60;
-      timerDisplay.textContent = `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
-      timerDisplay.style.color = timeSeconds < 60 ? '#e06060' : 'white';
-    }
-    function stopTimer() { if (timerInterval) { clearInterval(timerInterval); timerInterval = null; } }
-    function getElapsedTime() { return 1800 - timeSeconds; }
-
-    // ========== SUBMIT ==========
-    function autoSubmit() { if (!isSubmitted) doSubmit(true); }
-
-    function doSubmit(isAuto = false) {
-      if (isSubmitted) return;
-      const score = calculateScore();
-      const elapsed = getElapsedTime();
-      const gridData = [];
-      for (let r = 0; r < ROWS; r++) {
-        const row = [];
-        for (let c = 0; c < COLS; c++) row.push(currentGrid[r][c].value || '');
-        gridData.push(row);
+      if (timeSeconds <= 0) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        isTimerEnded = true;
+        showStatus('⏰ समय समाप्त! स्वतः जमा किया जा रहा है...', 'error');
+        autoSubmit();
       }
-      const percentage = score.total > 0 ? Math.round((score.correct / score.total) * 100) : 0;
+    }, 1000);
+  }
 
-      const payload = {
-        name: userName,
-        number: userNumber,
-        designation: userDesignation,
-        office: userOffice,
-        mobile: userMobile,
-        score: score.correct,
-        totalLetters: score.total,
-        duration: elapsed,
-        percent: percentage,
-        auto: isAuto ? 'yes' : 'no',
-        grid: JSON.stringify(gridData)
-      };
+  function updateTimerDisplay() {
+    const mins = Math.floor(timeSeconds / 60);
+    const secs = timeSeconds % 60;
+    timerDisplay.textContent = (mins < 10 ? '0' : '') + mins + ':' + (secs < 10 ? '0' : '') + secs;
+    timerDisplay.style.color = timeSeconds < 60 ? '#e06060' : 'white';
+  }
 
-      fetch(`${GAS_URL}?action=submitCrossword&payload=${encodeURIComponent(JSON.stringify(payload))}`)
-        .then(r => r.json())
-        .then(data => {
-          if (data.success) {
-            isSubmitted = true;
-            stopTimer();
-            submitBtn.disabled = true;
-            document.querySelectorAll('#crosswordGrid input').forEach(inp => inp.disabled = true);
-            showStatus('✅ सफलपूर्वक सबमिट कर दिया। हार्दिक शुभकामनाएं !!', 'success');
-            loadLeaderboardCount();
-            clearGridEntries();
-          } else {
-            showStatus('❌ जमा करने में त्रुटि: ' + data.error, 'error');
-          }
-        })
-        .catch(err => showStatus('❌ नेटवर्क त्रुटि: ' + err
+  function stopTimer() { if (timerInterval) { clearInterval(timerInterval); timerInterval = null; } }
+  function getElapsedTime() { return 1800 - timeSeconds; }
+
+  function autoSubmit() { if (!isSubmitted) doSubmit(true); }
+
+  function doSubmit(isAuto) {
+    if (isSubmitted) return;
+    const score = calculateScore();
+    const elapsed = getElapsedTime();
+    const gridData = [];
+    for (let r = 0; r < ROWS; r++) {
+      const row = [];
+      for (let c = 0; c < COLS; c++) row.push(currentGrid[r][c].value || '');
+      gridData.push(row);
+    }
+    const percentage = score.total > 0 ? Math.round((score.correct / score.total) * 100) : 0;
+
+    const payload = {
+      name: userName, number: userNumber, designation: userDesignation,
+      office: userOffice, mobile: userMobile,
+      score: score.correct, totalLetters: score.total,
+      duration: elapsed, percent: percentage,
+      auto: isAuto ? 'yes' : 'no',
+      grid: JSON.stringify(gridData)
+    };
+
+    fetch(GAS_URL + '?action=submitCrossword&payload=' + encodeURIComponent(JSON.stringify(payload)))
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.success) {
+          isSubmitted = true;
+          stopTimer();
+          submitBtn.disabled = true;
+          document.querySelectorAll('#crosswordGrid input').forEach(function(inp) { inp.disabled = true; });
+          showStatus('✅ सफलपूर्वक सबमिट कर दिया। हार्दिक शुभकामनाएं !!', 'success');
+          loadLeaderboardCount();
+          clearGridEntries();
+        } else {
+          showStatus('❌ जमा करने में त्रुटि: ' + data.error, 'error');
+        }
+      })
+      .catch(function(err) { showStatus('❌ नेटवर्क त्रुटि: ' + err.message, 'error'); });
+  }
+
+  function clearGridEntries() {
+    for (let r = 0; r < ROWS; r++) {
+      for (let c = 0; c < COLS; c++) {
+        const cell = currentGrid[r][c];
+        if (!cell.block) cell.value = '';
+      }
+    }
+    renderGrid();
+  }
+
+  function loadLeaderboard() {
+    lbRefreshBtn.disabled = true;
+    lbRefreshBtn.textContent = '⏳ लोड...';
+    lbTableBody.innerHTML = '<tr><td colspan="10" class="no-data"><div class="loading-spinner"></div> लोड हो रहा है...</td></tr>';
+    fetch(GAS_URL + '?action=getLeaderboard')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.success) {
+          renderLeaderboard(data);
+          lbBadge.textContent = data.count || 0;
+          lbTotal.textContent = data.count || 0;
+        } else {
+          lbTableBody.innerHTML = '<tr><td colspan="10" class="no-data" style="color:#b3363a;">❌ ' + (data.error || 'Failed to load') + '</td></tr>';
+        }
+      })
+      .catch(function(err) {
+        lbTableBody.innerHTML = '<tr><td colspan="10" class="no-data" style="color:#b3363a;">❌ नेटवर्क त्रुटि: ' + err.message + '</td></tr>';
+      })
+      .finally(function() {
+        lbRefreshBtn.disabled = false;
+        lbRefreshBtn.textContent = '🔄 रिफ्रेश';
+      });
+  }
+
+  function loadLeaderboardCount() {
+    fetch(GAS_URL + '?action=getLeaderboard')
+      .then(function(r) { return r.json(); })
+      .then(function(data) { if (data.success) lbBadge.textContent = data.count || 0; })
+      .catch(function() {});
+  }
+
+  function renderLeaderboard(data) {
+    const submissions = data.data || [];
+    if (submissions.length === 0) {
+      lbTableBody.innerHTML = '<tr><td colspan="10" class="no-data">📭 अभी कोई प्रतिभागी नहीं</td></tr>';
+      return;
+    }
+    let html = '';
+    submissions.forEach(function(row, index) {
+      const rank = index + 1;
+      const timeStr = row.timestamp ? row.timestamp.split('T')[0] + ' ' + row.timestamp.split('T')[1].substring(0,5) : '-';
+      html += '<tr>' +
+        '<td class="rank-col">' + rank + '</td>' +
+        '<td>' + escapeHtml(row.name) + '</td>' +
+        '<td>' + escapeHtml(row.designation || '-') + '</td>' +
+        '<td>' + escapeHtml(row.office || '-') + '</td>' +
+        '<td>' + escapeHtml(row.mobile || '-') + '</td>' +
+        '<td style="text-align:center; font-weight:700; color:#1e3a5f;">' + row.score + '</td>' +
+        '<td style="text-align:center; color:#4a5f76;">' + row.totalLetters + '</td>' +
+        '<td style="text-align:center; color:#4a5f76;">' + (row.percentage || 0) + '%</td>' +
+        '<td style="color:#4a5f76; font-size:0.85rem;">' + (row.duration || '-') + '</td>' +
+        '<td style="color:#4a5f76; font-size:0.75rem;">' + timeStr + '</td>' +
+        '</tr>';
+    });
+    lbTableBody.innerHTML = html;
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  function toggleOrganizer() {
+    isOrganizer = !isOrganizer;
+    if (isOrganizer) {
+      leaderboardTabBtn.style.display = 'inline-block';
+      orgToggle.textContent = '🔓 आयोजक दृश्य (सक्रिय)';
+      switchTab('leaderboard');
+      loadLeaderboard();
+    } else {
+      leaderboardTabBtn.style.display = 'none';
+      orgToggle.textContent = '🔒 आयोजक दृश्य';
+      switchTab('puzzle');
+    }
+  }
+
+  function handleLogin() {
+    const name = userNameInput.value.trim();
+    const designation = userDesignationInput.value.trim();
+    const office = userOfficeInput.value.trim();
+    const mobile = userMobileInput.value.trim();
+    const num = userNumberInput.value.trim();
+
+    if (!name) { loginError.textContent = 'कृपया अपना नाम भरें।'; loginError.style.display = 'block'; return; }
+    if (!num) { loginError.textContent = 'कृपया रोल नंबर भरें।'; loginError.style.display = 'block'; return; }
+    loginError.style.display = 'none';
+    loginBtn.disabled = true;
+    loginBtn.textContent = '⏳ चेक कर रहे हैं...';
+
+    fetch(GAS_URL + '?action=checkRoll&rollNumber=' + encodeURIComponent(num))
+      .then(function(r) { return r.json(); })
+      .then(function(result) {
+        if (result.exists) {
+          loginError.textContent = '❌ रोल नंबर ' + num + ' पहले से जमा है (' + result.name + ')';
+          loginError.style.display = 'block';
+          loginBtn.disabled = false;
+          loginBtn.textContent = '▶ शुरू करें';
+          return;
+        }
+        userName = name;
+        userDesignation = designation;
+        userOffice = office;
+        userMobile = mobile;
+        userNumber = num;
+        userBadge.innerHTML = '👤 ' + userName + ' (रोल: ' + userNumber + ')';
+
+        currentGrid = buildEmptyGrid();
+        isSubmitted = false;
+        isTimerEnded = false;
+        hideStatus();
+        submitBtn.disabled = false;
+        renderClues();
+        renderGrid();
+
+        loginPage.style.display = 'none';
+        tabNav.style.display = 'flex';
+        puzzlePage.style.display = 'block';
+        leaderboardPage.style.display = 'none';
+        leaderboardTabBtn.style.display = 'none';
+        document.querySelectorAll('.tab-btn').forEach(function(btn) { btn.classList.remove('active'); });
+        document.querySelector('[data-tab="puzzle"]').classList.add('active');
+
+        startTimer();
+        loadLeaderboardCount();
+
+        loginBtn.disabled = false;
+        loginBtn.textContent = '▶ शुरू करें';
+      })
+      .catch(function(err) {
+        loginError.textContent = '❌ त्रुटि: ' + err.message;
+        loginError.style.display = 'block';
+        loginBtn.disabled = false;
+        loginBtn.textContent = '▶ शुरू करें';
+      });
+  }
+
+  function switchTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.remove('active'); });
+    var target = document.getElementById(tabId + 'Page');
+    if (target) target.classList.add('active');
+    document.querySelectorAll('.tab-btn').forEach(function(btn) {
+      btn.classList.toggle('active', btn.dataset.tab === tabId);
+    });
+    if (tabId === 'leaderboard') {
+      leaderboardPage.style.display = 'block';
+      loadLeaderboard();
+    } else {
+      leaderboardPage.style.display = 'none';
+    }
+  }
+
+  function handleLogout() {
+    stopTimer();
+    isSubmitted = true;
+    loginPage.style.display = 'block';
+    tabNav.style.display = 'none';
+    puzzlePage.style.display = 'none';
+    leaderboardPage.style.display = 'none';
+    leaderboardTabBtn.style.display = 'none';
+    isOrganizer = false;
+    orgToggle.textContent = '🔒 आयोजक दृश्य';
+    userName = userDesignation = userOffice = userMobile = userNumber = '';
+    userNameInput.value = '';
+    userDesignationInput.value = '';
+    userOfficeInput.value = '';
+    userMobileInput.value = '';
+    userNumberInput.value = '';
+    hideStatus();
+    if (timerInterval) clearInterval(timerInterval);
+    document.querySelectorAll('.tab-btn').forEach(function(btn) { btn.classList.remove('active'); });
+  }
+
+  loginBtn.addEventListener('click', handleLogin);
+  userNameInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') handleLogin(); });
+  userNumberInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') handleLogin(); });
+
+  submitBtn.addEventListener('click', function() { doSubmit(false); });
+
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var tab = this.dataset.tab;
+      if (tab === 'login') handleLogout();
+      else if (tab === 'leaderboard' && isOrganizer) switchTab('leaderboard');
+      else if (tab === 'puzzle') switchTab('puzzle');
+    });
+  });
+
+  lbRefreshBtn.addEventListener('click', loadLeaderboard);
+  orgToggle.addEventListener('click', toggleOrganizer);
+
+  renderClues();
+  console.log('🧩 Crossword ready. Use login to start.');
+})();
+</script>
+</body>
+</html>
