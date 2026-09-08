@@ -63,6 +63,14 @@
     .form-group input:focus, .form-group select:focus {
       outline: none; border-color: #1e3a5f; box-shadow: 0 0 0 3px rgba(30,58,95,0.15);
     }
+    .form-group input[type="number"] {
+      -moz-appearance: textfield;
+    }
+    .form-group input[type="number"]::-webkit-outer-spin-button,
+    .form-group input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
     .btn-login {
       width: 100%; padding: 0.9rem; background: #1e3a5f; color: white; border: none;
       border-radius: 40px; font-weight: 700; font-size: 1.1rem; cursor: pointer;
@@ -216,18 +224,32 @@
   <div id="loginPage">
     <h1>🧩 शब्द पहेली</h1>
     <p class="sub">व्यक्तिगत प्रतियोगिता · CROSSWORD 2026</p>
+    
     <div class="form-group">
       <label for="userName">आपका नाम (Your Name)</label>
       <input type="text" id="userName" placeholder="जैसे: राम, Priya ..." autofocus>
     </div>
+    
     <div class="form-group">
       <label for="userDesignation">पद / Designation</label>
       <input type="text" id="userDesignation" placeholder="जैसे: शिक्षक, अधिकारी, छात्र ...">
     </div>
+    
+    <div class="form-group">
+      <label for="userOffice">कार्यालय का नाम (Name of Office)</label>
+      <input type="text" id="userOffice" placeholder="जैसे: SBI मुख्य शाखा, कोषिकोड ...">
+    </div>
+    
+    <div class="form-group">
+      <label for="userMobile">मोबाइल नंबर (Mobile Number)</label>
+      <input type="tel" id="userMobile" placeholder="उदा. 9876543210" pattern="[0-9]{10}" maxlength="10">
+    </div>
+    
     <div class="form-group">
       <label for="userNumber">रोल नंबर (Roll Number) <span style="color:#b3363a;font-size:0.8rem;">*अद्वितीय</span></label>
       <input type="number" id="userNumber" placeholder="उदा. 101" min="1">
     </div>
+    
     <div id="loginError" class="error-msg"></div>
     <div id="loginSuccess" class="success-msg"></div>
     <button class="btn-login" id="loginBtn">▶ शुरू करें</button>
@@ -293,6 +315,8 @@
             <th style="width:50px;">#</th>
             <th>नाम</th>
             <th>पद</th>
+            <th>कार्यालय</th>
+            <th>मोबाइल</th>
             <th style="text-align:center; width:70px;">स्कोर</th>
             <th style="text-align:center; width:70px;">कुल</th>
             <th style="text-align:center; width:70px;">%</th>
@@ -301,7 +325,7 @@
           </tr>
         </thead>
         <tbody id="lbTableBody">
-          <tr><td colspan="8" class="no-data"><div class="loading-spinner"></div> लोड हो रहा है...</td></tr>
+          <tr><td colspan="10" class="no-data"><div class="loading-spinner"></div> लोड हो रहा है...</td></tr>
         </tbody>
       </table>
     </div>
@@ -311,6 +335,7 @@
 <script>
   (function() {
     // ========== CONFIG ==========
+    // IMPORTANT: Replace with your deployed Apps Script URL
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbzT8a-dgkOfVFgyNHEls7iOkfgOuPrq27nv0QG6OEM7e0U4JNLftsEGNIsf8AjzCNHW/exec';
 
     // ========== CROSSWORD DATA ==========
@@ -362,7 +387,7 @@
 
     // ========== STATE ==========
     let currentGrid = [];
-    let userName = '', userDesignation = '', userNumber = '';
+    let userName = '', userDesignation = '', userOffice = '', userMobile = '', userNumber = '';
     let timerInterval = null;
     let timeSeconds = 1800; // 30 मिनट
     let isSubmitted = false, isTimerEnded = false;
@@ -376,6 +401,8 @@
     const leaderboardTabBtn = document.getElementById('leaderboardTabBtn');
     const userNameInput = document.getElementById('userName');
     const userDesignationInput = document.getElementById('userDesignation');
+    const userOfficeInput = document.getElementById('userOffice');
+    const userMobileInput = document.getElementById('userMobile');
     const userNumberInput = document.getElementById('userNumber');
     const loginError = document.getElementById('loginError');
     const loginBtn = document.getElementById('loginBtn');
@@ -519,9 +546,16 @@
       const percentage = score.total > 0 ? Math.round((score.correct / score.total) * 100) : 0;
 
       const payload = {
-        name: userName, number: userNumber, designation: userDesignation,
-        score: score.correct, totalLetters: score.total,
-        duration: elapsed, percent: percentage, auto: isAuto ? 'yes' : 'no',
+        name: userName,
+        number: userNumber,
+        designation: userDesignation,
+        office: userOffice,
+        mobile: userMobile,
+        score: score.correct,
+        totalLetters: score.total,
+        duration: elapsed,
+        percent: percentage,
+        auto: isAuto ? 'yes' : 'no',
         grid: JSON.stringify(gridData)
       };
 
@@ -533,7 +567,6 @@
             stopTimer();
             submitBtn.disabled = true;
             document.querySelectorAll('#crosswordGrid input').forEach(inp => inp.disabled = true);
-            // Show only the submission confirmation message - no score shown
             showStatus('✅ सफलपूर्वक सबमिट कर दिया। हार्दिक शुभकामनाएं !!', 'success');
             loadLeaderboardCount();
             clearGridEntries();
@@ -541,224 +574,4 @@
             showStatus('❌ जमा करने में त्रुटि: ' + data.error, 'error');
           }
         })
-        .catch(err => showStatus('❌ नेटवर्क त्रुटि: ' + err.message, 'error'));
-    }
-
-    function clearGridEntries() {
-      for (let r = 0; r < ROWS; r++) {
-        for (let c = 0; c < COLS; c++) {
-          const cell = currentGrid[r][c];
-          if (!cell.block) {
-            cell.value = '';
-          }
-        }
-      }
-      renderGrid();
-    }
-
-    // ========== LEADERBOARD ==========
-    function loadLeaderboard() {
-      lbRefreshBtn.disabled = true;
-      lbRefreshBtn.textContent = '⏳ लोड...';
-      lbTableBody.innerHTML = '<tr><td colspan="8" class="no-data"><div class="loading-spinner"></div> लोड हो रहा है...</td></tr>';
-      fetch(`${GAS_URL}?action=getLeaderboard`)
-        .then(r => r.json())
-        .then(data => {
-          if (data.success) {
-            renderLeaderboard(data);
-            lbBadge.textContent = data.count || 0;
-            lbTotal.textContent = data.count || 0;
-          } else {
-            lbTableBody.innerHTML = `<tr><td colspan="8" class="no-data" style="color:#b3363a;">❌ ${data.error || 'Failed to load'}</td></tr>`;
-          }
-        })
-        .catch(err => {
-          lbTableBody.innerHTML = `<tr><td colspan="8" class="no-data" style="color:#b3363a;">❌ नेटवर्क त्रुटि: ${err.message}</td></tr>`;
-        })
-        .finally(() => {
-          lbRefreshBtn.disabled = false;
-          lbRefreshBtn.textContent = '🔄 रिफ्रेश';
-        });
-    }
-
-    function loadLeaderboardCount() {
-      fetch(`${GAS_URL}?action=getLeaderboard`)
-        .then(r => r.json())
-        .then(data => { if (data.success) lbBadge.textContent = data.count || 0; })
-        .catch(() => {});
-    }
-
-    function renderLeaderboard(data) {
-      const submissions = data.data || [];
-      if (submissions.length === 0) {
-        lbTableBody.innerHTML = '<tr><td colspan="8" class="no-data">📭 अभी कोई प्रतिभागी नहीं</td></tr>';
-        return;
-      }
-      const topScore = submissions[0]?.score || -1;
-      const secondScore = submissions[1]?.score || -1;
-      const thirdScore = submissions[2]?.score || -1;
-      let html = '';
-      submissions.forEach((row, index) => {
-        const rank = index + 1;
-        let medal = '';
-        if (row.score === topScore && topScore > 0) medal = '🥇';
-        else if (row.score === secondScore && secondScore > 0 && row.score !== topScore) medal = '🥈';
-        else if (row.score === thirdScore && thirdScore > 0 && row.score !== topScore && row.score !== secondScore) medal = '🥉';
-        const isTop = row.score === topScore && topScore > 0;
-        const timeStr = row.timestamp ? row.timestamp.split('T')[0] + ' ' + row.timestamp.split('T')[1].substring(0,5) : '-';
-        html += `<tr class="${isTop ? 'top-score' : ''}">
-          <td class="rank-col">${medal || rank}</td>
-          <td>${escapeHtml(row.name)}</td>
-          <td>${escapeHtml(row.designation || '-')}</td>
-          <td style="text-align:center; font-weight:700; color:#1e3a5f;">${row.score}</td>
-          <td style="text-align:center; color:#4a5f76;">${row.totalLetters}</td>
-          <td style="text-align:center; color:#4a5f76;">${row.percentage || 0}%</td>
-          <td style="color:#4a5f76; font-size:0.85rem;">${row.duration || '-'}</td>
-          <td style="color:#4a5f76; font-size:0.75rem;">${timeStr}</td>
-        </tr>`;
-      });
-      lbTableBody.innerHTML = html;
-    }
-
-    function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
-    }
-
-    // ========== ORGANIZER TOGGLE ==========
-    function toggleOrganizer() {
-      isOrganizer = !isOrganizer;
-      if (isOrganizer) {
-        leaderboardTabBtn.style.display = 'inline-block';
-        orgToggle.textContent = '🔓 आयोजक दृश्य (सक्रिय)';
-        switchTab('leaderboard');
-        loadLeaderboard();
-      } else {
-        leaderboardTabBtn.style.display = 'none';
-        orgToggle.textContent = '🔒 आयोजक दृश्य';
-        switchTab('puzzle');
-      }
-    }
-
-    // ========== LOGIN ==========
-    function handleLogin() {
-      const name = userNameInput.value.trim();
-      const designation = userDesignationInput.value.trim();
-      const num = userNumberInput.value.trim();
-
-      if (!name) { loginError.textContent = 'कृपया अपना नाम भरें।'; loginError.style.display = 'block'; return; }
-      if (!num) { loginError.textContent = 'कृपया रोल नंबर भरें।'; loginError.style.display = 'block'; return; }
-      loginError.style.display = 'none';
-      loginBtn.disabled = true;
-      loginBtn.textContent = '⏳ चेक कर रहे हैं...';
-
-      fetch(`${GAS_URL}?action=checkRoll&rollNumber=${encodeURIComponent(num)}`)
-        .then(r => r.json())
-        .then(result => {
-          if (result.exists) {
-            loginError.textContent = `❌ रोल नंबर ${num} पहले से जमा है (${result.name})`;
-            loginError.style.display = 'block';
-            loginBtn.disabled = false;
-            loginBtn.textContent = '▶ शुरू करें';
-            return;
-          }
-          userName = name;
-          userDesignation = designation;
-          userNumber = num;
-          userBadge.innerHTML = `👤 ${userName} (रोल: ${userNumber})`;
-
-          currentGrid = buildEmptyGrid();
-          isSubmitted = false;
-          isTimerEnded = false;
-          hideStatus();
-          submitBtn.disabled = false;
-          renderClues();
-          renderGrid();
-
-          loginPage.style.display = 'none';
-          tabNav.style.display = 'flex';
-          puzzlePage.style.display = 'block';
-          leaderboardPage.style.display = 'none';
-          leaderboardTabBtn.style.display = 'none';
-          document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-          document.querySelector('[data-tab="puzzle"]').classList.add('active');
-
-          startTimer();
-          loadLeaderboardCount();
-
-          loginBtn.disabled = false;
-          loginBtn.textContent = '▶ शुरू करें';
-        })
-        .catch(err => {
-          loginError.textContent = '❌ त्रुटि: ' + err.message;
-          loginError.style.display = 'block';
-          loginBtn.disabled = false;
-          loginBtn.textContent = '▶ शुरू करें';
-        });
-    }
-
-    // ========== TAB SWITCHING ==========
-    function switchTab(tabId) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-      const target = document.getElementById(tabId + 'Page');
-      if (target) target.classList.add('active');
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.tab === tabId);
-      });
-      if (tabId === 'leaderboard') {
-        leaderboardPage.style.display = 'block';
-        loadLeaderboard();
-      } else {
-        leaderboardPage.style.display = 'none';
-      }
-    }
-
-    function handleLogout() {
-      stopTimer();
-      isSubmitted = true;
-      loginPage.style.display = 'block';
-      tabNav.style.display = 'none';
-      puzzlePage.style.display = 'none';
-      leaderboardPage.style.display = 'none';
-      leaderboardTabBtn.style.display = 'none';
-      isOrganizer = false;
-      orgToggle.textContent = '🔒 आयोजक दृश्य';
-      userName = userDesignation = userNumber = '';
-      userNameInput.value = '';
-      userDesignationInput.value = '';
-      userNumberInput.value = '';
-      hideStatus();
-      if (timerInterval) clearInterval(timerInterval);
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-    }
-
-    // ========== EVENT BINDING ==========
-    loginBtn.addEventListener('click', handleLogin);
-    userNameInput.addEventListener('keydown', e => { if (e.key === 'Enter') handleLogin(); });
-    userNumberInput.addEventListener('keydown', e => { if (e.key === 'Enter') handleLogin(); });
-
-    submitBtn.addEventListener('click', function() { doSubmit(false); });
-
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        const tab = this.dataset.tab;
-        if (tab === 'login') handleLogout();
-        else if (tab === 'leaderboard' && isOrganizer) {
-          switchTab('leaderboard');
-        } else if (tab === 'puzzle') {
-          switchTab('puzzle');
-        }
-      });
-    });
-
-    lbRefreshBtn.addEventListener('click', loadLeaderboard);
-    orgToggle.addEventListener('click', toggleOrganizer);
-
-    // ========== INIT ==========
-    renderClues();
-    console.log('🧩 Crossword ready. Use login to start.');
-  })();
-</script>
-</body>
-</html>
+        .catch(err => showStatus('❌ नेटवर्क त्रुटि: ' + err
