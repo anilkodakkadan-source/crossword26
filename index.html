@@ -3,63 +3,71 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🧩 शब्द पहेली · व्यक्तिगत</title>
+  <title>🧩 शब्द पहेली</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
     body {
       background: #f0f2f5;
       font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
       display: flex;
       justify-content: center;
       min-height: 100vh;
-      padding: 1rem;
+      padding: 20px;
     }
     .container {
       max-width: 960px;
       width: 100%;
     }
-    .tab-nav {
-      display: flex;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
-      flex-wrap: wrap;
-    }
-    .tab-btn {
-      padding: 0.7rem 1.8rem;
-      border: none;
-      border-radius: 40px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: 0.2s;
-      background: white;
-      color: #1e2b3c;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    }
-    .tab-btn:hover { background: #e8edf5; transform: translateY(-2px); }
-    .tab-btn.active { background: #1e3a5f; color: white; box-shadow: 0 4px 12px rgba(30,58,95,0.3); }
-    .tab-btn .badge {
-      background: #dc3545; color: white; border-radius: 20px;
-      padding: 0.05rem 0.6rem; font-size: 0.7rem; margin-left: 0.3rem;
-    }
-    .tab-content { display: none; animation: fadeIn 0.3s ease; }
-    .tab-content.active { display: block; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+    /* Login Page */
     #loginPage {
-      background: white; border-radius: 2rem; padding: 3rem 2.5rem;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.12); max-width: 520px; margin: 0 auto;
+      background: white;
+      border-radius: 30px;
+      padding: 40px 35px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+      max-width: 500px;
+      margin: 0 auto;
     }
-    #loginPage h1 { font-size: 2.2rem; color: #1e2b3c; text-align: center; margin-bottom: 0.3rem; }
-    #loginPage .sub { text-align: center; color: #5a6f84; margin-bottom: 2rem; font-size: 1rem; }
-    .form-group { margin-bottom: 1.5rem; }
-    .form-group label { display: block; font-weight: 600; color: #1f3857; margin-bottom: 0.4rem; font-size: 0.95rem; }
+    #loginPage h1 {
+      font-size: 28px;
+      color: #1e2b3c;
+      text-align: center;
+      margin-bottom: 5px;
+    }
+    #loginPage .sub {
+      text-align: center;
+      color: #5a6f84;
+      margin-bottom: 25px;
+      font-size: 14px;
+    }
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      color: #1f3857;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
     .form-group input {
-      width: 100%; padding: 0.8rem 1rem; border: 2px solid #d7e0eb; border-radius: 12px;
-      font-size: 1rem; transition: 0.15s; font-family: inherit; background: white;
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #d7e0eb;
+      border-radius: 12px;
+      font-size: 15px;
+      transition: 0.15s;
+      font-family: inherit;
+      background: white;
     }
     .form-group input:focus {
-      outline: none; border-color: #1e3a5f; box-shadow: 0 0 0 3px rgba(30,58,95,0.15);
+      outline: none;
+      border-color: #1e3a5f;
+      box-shadow: 0 0 0 3px rgba(30,58,95,0.15);
     }
     .form-group input[type="number"] {
       -moz-appearance: textfield;
@@ -70,177 +78,502 @@
       margin: 0;
     }
     .btn-login {
-      width: 100%; padding: 0.9rem; background: #1e3a5f; color: white; border: none;
-      border-radius: 40px; font-weight: 700; font-size: 1.1rem; cursor: pointer;
-      transition: 0.15s; box-shadow: 0 4px 0 #0f283f; margin-top: 0.5rem;
+      width: 100%;
+      padding: 14px;
+      background: #1e3a5f;
+      color: white;
+      border: none;
+      border-radius: 40px;
+      font-weight: 700;
+      font-size: 18px;
+      cursor: pointer;
+      transition: 0.15s;
+      box-shadow: 0 4px 0 #0f283f;
+      margin-top: 10px;
     }
-    .btn-login:hover { background: #274b78; transform: translateY(-2px); }
-    .btn-login:active { transform: translateY(4px); box-shadow: 0 0px 0 #0f283f; }
-    .btn-login:disabled { background: #6a7f94; cursor: not-allowed; transform: none; box-shadow: 0 4px 0 #4a5a6a; }
-    .error-msg { color: #b3363a; background: #ffe6e6; padding: 0.6rem 1rem; border-radius: 10px; font-size: 0.9rem; margin-top: 0.5rem; display: none; }
-
-    #puzzlePage {
-      background: white; border-radius: 2.5rem 2.5rem 2rem 2rem;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.12); padding: 2rem 1.5rem 2.5rem;
+    .btn-login:hover {
+      background: #274b78;
+      transform: translateY(-2px);
     }
-    .header-row {
-      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;
-      border-bottom: 3px solid #dce3ec; padding-bottom: 0.6rem; margin-bottom: 1.5rem;
+    .btn-login:active {
+      transform: translateY(4px);
+      box-shadow: 0 0px 0 #0f283f;
     }
-    .header-row h1 { font-size: 1.8rem; font-weight: 500; color: #1e2b3c; }
-    .header-row .timer {
-      font-size: 1.8rem; font-weight: 700; background: #1e2b3c; color: white;
-      padding: 0.2rem 1.2rem; border-radius: 40px; letter-spacing: 2px;
+    .btn-login:disabled {
+      background: #6a7f94;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: 0 4px 0 #4a5a6a;
     }
-    .user-badge { font-size: 0.9rem; color: #2a4057; background: #eef2f7; padding: 0.2rem 1.2rem; border-radius: 30px; display: inline-block; }
-    .grid-container {
-      display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px;
-      background: #b7c3d3; border: 4px solid #2c3e50; border-radius: 16px;
-      overflow: hidden; margin-bottom: 1.8rem; box-shadow: 0 6px 0 #1f2a36;
-    }
-    .cell {
-      aspect-ratio: 1/1; background: white; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 500;
-      color: #0a1a2b; position: relative; padding: 2px;
-    }
-    .cell .num {
-      position: absolute; top: 2px; left: 5px; font-size: 0.55rem; font-weight: 700;
-      color: #1d3b5c; opacity: 0.8;
-    }
-    .cell.block { background: #2c3e50; }
-    .cell input {
-      width: 100%; height: 100%; border: none; background: transparent;
-      text-align: center; font-size: 1.5rem; font-weight: 500; color: #0a1a2b;
-      padding: 0; outline: none; font-family: inherit;
-    }
-    .cell input:focus { background: rgba(30,58,95,0.05); }
-    .cell input:disabled { background: #f5f5f5; color: #666; cursor: not-allowed; }
-
-    .clue-section {
-      display: flex; flex-wrap: wrap; gap: 1.8rem 3rem;
-      background: #f8faff; padding: 1.2rem 1.8rem; border-radius: 28px;
-      margin: 0.8rem 0 1.5rem; border: 1px solid #d7e0eb;
-    }
-    .clue-col { flex: 1 1 200px; }
-    .clue-col h3 { font-size: 0.95rem; text-transform: uppercase; letter-spacing: 2px; color: #2a4057; border-bottom: 2px solid #cddae9; padding-bottom: 4px; margin-bottom: 8px; }
-    .clue-item { font-size: 0.85rem; padding: 2px 0; display: flex; gap: 6px; border-bottom: 1px dashed #e3eaf3; }
-    .clue-item .clue-no { font-weight: 700; color: #1e3d64; min-width: 26px; }
-    .clue-item .clue-text { color: #1f3349; }
-
-    .action-bar {
-      display: flex; justify-content: flex-end; gap: 0.8rem; margin-top: 0.5rem;
-    }
-    .btn {
-      border: none; padding: 0.6rem 1.8rem; border-radius: 40px; font-weight: 600;
-      font-size: 0.95rem; cursor: pointer; transition: 0.15s;
-    }
-    .btn-success { background: #1f7b4d; color: white; box-shadow: 0 3px 0 #0f4f2e; }
-    .btn-success:hover { background: #289a60; transform: translateY(-2px); }
-    .btn-success:active { transform: translateY(3px); box-shadow: 0 0px 0 #0f4f2e; }
-    .btn-success:disabled { background: #6c8a7a; cursor: not-allowed; transform: none; box-shadow: 0 3px 0 #4a5f52; }
-
-    .status-msg {
-      padding: 0.7rem 1.2rem; border-radius: 16px; margin-top: 1rem; display: none; font-weight: 500;
-      text-align: center;
-    }
-    .status-msg.success { display: block; background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-    .status-msg.error { display: block; background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-
-    .score-display { display: none !important; }
-    .footnote { margin-top: 1rem; font-size: 0.75rem; color: #4b6079; text-align: right; border-top: 1px solid #dce5ef; padding-top: 0.6rem; }
-
-    #leaderboardPage {
-      background: white; border-radius: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.12); padding: 2rem 1.5rem;
+    .error-msg {
+      color: #b3363a;
+      background: #ffe6e6;
+      padding: 10px 15px;
+      border-radius: 10px;
+      font-size: 14px;
+      margin-top: 10px;
       display: none;
     }
-    #leaderboardPage.active { display: block; }
-    .lb-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; border-bottom: 3px solid #dce3ec; padding-bottom: 0.6rem; margin-bottom: 1.5rem; }
-    .lb-header h1 { font-size: 1.8rem; font-weight: 500; color: #1e2b3c; }
-    .lb-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
-    .lb-stat-card { background: #f8faff; padding: 1rem; border-radius: 16px; text-align: center; border: 2px solid #dce5ef; }
-    .lb-stat-card .num { font-size: 2rem; font-weight: 700; color: #1e3a5f; }
-    .lb-stat-card .label { font-size: 0.85rem; color: #4a5f76; }
-    .lb-table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid #eef2f7; }
-    .lb-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-    .lb-table th { background: #f8faff; padding: 0.7rem 0.8rem; text-align: left; font-weight: 700; color: #1f3857; border-bottom: 2px solid #dce5ef; }
-    .lb-table td { padding: 0.6rem 0.8rem; border-bottom: 1px solid #f0f2f5; }
-    .lb-table .rank-col { font-weight: 700; width: 50px; text-align: center; }
-    .lb-refresh-btn { padding: 0.5rem 1.5rem; background: #1e3a5f; color: white; border: none; border-radius: 30px; cursor: pointer; font-weight: 600; transition: 0.2s; }
-    .lb-refresh-btn:hover { background: #274b78; transform: translateY(-2px); }
-    .lb-refresh-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-    .loading-spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid #eef2f7; border-radius: 50%; border-top-color: #1e3a5f; animation: spin 0.8s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .no-data { text-align: center; padding: 2rem; color: #4a5f76; }
-    .org-toggle { font-size: 0.7rem; color: #6a7f94; cursor: pointer; text-decoration: underline; margin-left: 1rem; user-select: none; }
-    .org-toggle:hover { color: #1e3a5f; }
+    .org-toggle {
+      font-size: 12px;
+      color: #6a7f94;
+      cursor: pointer;
+      text-decoration: underline;
+      user-select: none;
+    }
+    .org-toggle:hover {
+      color: #1e3a5f;
+    }
+
+    /* Puzzle Page */
+    #puzzlePage {
+      background: white;
+      border-radius: 30px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+      padding: 25px 20px 30px;
+      display: none;
+    }
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      border-bottom: 3px solid #dce3ec;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+    .header-row h1 {
+      font-size: 24px;
+      font-weight: 500;
+      color: #1e2b3c;
+    }
+    .header-row .timer {
+      font-size: 28px;
+      font-weight: 700;
+      background: #1e2b3c;
+      color: white;
+      padding: 5px 20px;
+      border-radius: 40px;
+      letter-spacing: 2px;
+    }
+    .user-badge {
+      font-size: 14px;
+      color: #2a4057;
+      background: #eef2f7;
+      padding: 5px 18px;
+      border-radius: 30px;
+      display: inline-block;
+      margin-bottom: 15px;
+    }
+
+    /* Grid */
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 4px;
+      background: #b7c3d3;
+      border: 4px solid #2c3e50;
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      box-shadow: 0 6px 0 #1f2a36;
+    }
+    .cell {
+      aspect-ratio: 1/1;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 500;
+      color: #0a1a2b;
+      position: relative;
+      padding: 2px;
+    }
+    .cell .num {
+      position: absolute;
+      top: 2px;
+      left: 5px;
+      font-size: 10px;
+      font-weight: 700;
+      color: #1d3b5c;
+      opacity: 0.8;
+    }
+    .cell.block {
+      background: #2c3e50;
+    }
+    .cell input {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: transparent;
+      text-align: center;
+      font-size: 22px;
+      font-weight: 500;
+      color: #0a1a2b;
+      padding: 0;
+      outline: none;
+      font-family: inherit;
+    }
+    .cell input:focus {
+      background: rgba(30,58,95,0.05);
+    }
+    .cell input:disabled {
+      background: #f5f5f5;
+      color: #666;
+      cursor: not-allowed;
+    }
+
+    /* Clues */
+    .clue-section {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px 40px;
+      background: #f8faff;
+      padding: 15px 20px;
+      border-radius: 28px;
+      margin: 10px 0 20px;
+      border: 1px solid #d7e0eb;
+    }
+    .clue-col {
+      flex: 1 1 200px;
+    }
+    .clue-col h3 {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #2a4057;
+      border-bottom: 2px solid #cddae9;
+      padding-bottom: 5px;
+      margin-bottom: 8px;
+    }
+    .clue-item {
+      font-size: 13px;
+      padding: 3px 0;
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px dashed #e3eaf3;
+    }
+    .clue-item .clue-no {
+      font-weight: 700;
+      color: #1e3d64;
+      min-width: 26px;
+    }
+    .clue-item .clue-text {
+      color: #1f3349;
+    }
+
+    /* Buttons */
+    .action-bar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .btn {
+      border: none;
+      padding: 10px 28px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .btn-success {
+      background: #1f7b4d;
+      color: white;
+      box-shadow: 0 3px 0 #0f4f2e;
+    }
+    .btn-success:hover {
+      background: #289a60;
+      transform: translateY(-2px);
+    }
+    .btn-success:active {
+      transform: translateY(3px);
+      box-shadow: 0 0px 0 #0f4f2e;
+    }
+    .btn-success:disabled {
+      background: #6c8a7a;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: 0 3px 0 #4a5f52;
+    }
+
+    .status-msg {
+      padding: 12px 18px;
+      border-radius: 16px;
+      margin-top: 15px;
+      display: none;
+      font-weight: 500;
+      text-align: center;
+    }
+    .status-msg.success {
+      display: block;
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    .status-msg.error {
+      display: block;
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .footnote {
+      margin-top: 15px;
+      font-size: 12px;
+      color: #4b6079;
+      text-align: right;
+      border-top: 1px solid #dce5ef;
+      padding-top: 10px;
+    }
+
+    /* Leaderboard */
+    #leaderboardPage {
+      background: white;
+      border-radius: 30px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+      padding: 25px 20px;
+      display: none;
+    }
+    .lb-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      border-bottom: 3px solid #dce3ec;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+    .lb-header h1 {
+      font-size: 24px;
+      font-weight: 500;
+      color: #1e2b3c;
+    }
+    .lb-refresh-btn {
+      padding: 8px 20px;
+      background: #1e3a5f;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+    .lb-refresh-btn:hover {
+      background: #274b78;
+      transform: translateY(-2px);
+    }
+    .lb-refresh-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .lb-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .lb-stat-card {
+      background: #f8faff;
+      padding: 15px;
+      border-radius: 16px;
+      text-align: center;
+      border: 2px solid #dce5ef;
+    }
+    .lb-stat-card .num {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1e3a5f;
+    }
+    .lb-stat-card .label {
+      font-size: 13px;
+      color: #4a5f76;
+    }
+    .lb-table-wrap {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid #eef2f7;
+    }
+    .lb-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .lb-table th {
+      background: #f8faff;
+      padding: 10px 12px;
+      text-align: left;
+      font-weight: 700;
+      color: #1f3857;
+      border-bottom: 2px solid #dce5ef;
+    }
+    .lb-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #f0f2f5;
+    }
+    .lb-table .rank-col {
+      font-weight: 700;
+      width: 50px;
+      text-align: center;
+    }
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #eef2f7;
+      border-radius: 50%;
+      border-top-color: #1e3a5f;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    .no-data {
+      text-align: center;
+      padding: 30px;
+      color: #4a5f76;
+    }
+
+    /* Tabs */
+    .tab-nav {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      display: none;
+    }
+    .tab-btn {
+      padding: 10px 24px;
+      border: none;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: 0.2s;
+      background: white;
+      color: #1e2b3c;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .tab-btn:hover {
+      background: #e8edf5;
+      transform: translateY(-2px);
+    }
+    .tab-btn.active {
+      background: #1e3a5f;
+      color: white;
+      box-shadow: 0 4px 12px rgba(30,58,95,0.3);
+    }
+    .tab-btn .badge {
+      background: #dc3545;
+      color: white;
+      border-radius: 20px;
+      padding: 2px 10px;
+      font-size: 12px;
+      margin-left: 5px;
+    }
 
     @media (max-width: 600px) {
-      .container { padding: 0; }
-      #loginPage { padding: 2rem 1.2rem; }
-      #puzzlePage, #leaderboardPage { padding: 1rem; }
-      .cell { font-size: 1.1rem; }
-      .cell input { font-size: 1.1rem; }
-      .header-row h1 { font-size: 1.3rem; }
-      .header-row .timer { font-size: 1.3rem; padding: 0.1rem 0.8rem; }
-      .tab-btn { padding: 0.5rem 1rem; font-size: 0.85rem; }
-      .lb-table { font-size: 0.75rem; }
-      .lb-table th, .lb-table td { padding: 0.3rem 0.4rem; }
+      body {
+        padding: 10px;
+      }
+      #loginPage {
+        padding: 25px 20px;
+      }
+      #puzzlePage,
+      #leaderboardPage {
+        padding: 15px 12px;
+      }
+      .cell {
+        font-size: 16px;
+      }
+      .cell input {
+        font-size: 16px;
+      }
+      .header-row h1 {
+        font-size: 18px;
+      }
+      .header-row .timer {
+        font-size: 20px;
+        padding: 3px 14px;
+      }
+      .tab-btn {
+        padding: 6px 14px;
+        font-size: 12px;
+      }
+      .lb-table {
+        font-size: 12px;
+      }
+      .lb-table th,
+      .lb-table td {
+        padding: 5px 8px;
+      }
+      .clue-item {
+        font-size: 12px;
+      }
     }
   </style>
 </head>
 <body>
 <div class="container">
 
-  <div class="tab-nav" id="tabNav" style="display:none;">
+  <!-- Tab Navigation -->
+  <div class="tab-nav" id="tabNav">
     <button class="tab-btn active" data-tab="puzzle">🧩 Crossword</button>
     <button class="tab-btn" data-tab="leaderboard" id="leaderboardTabBtn" style="display:none;">🏆 लीडरबोर्ड <span class="badge" id="lbBadge">0</span></button>
     <button class="tab-btn" data-tab="login" style="margin-left:auto;">🚪 लॉगआउट</button>
   </div>
 
+  <!-- Login Page -->
   <div id="loginPage">
     <h1>🧩 शब्द पहेली</h1>
     <p class="sub">व्यक्तिगत प्रतियोगिता · CROSSWORD 2026</p>
-    
+
     <div class="form-group">
       <label for="userName">आपका नाम (Your Name)</label>
-      <input type="text" id="userName" placeholder="जैसे: राम, Priya ..." autofocus>
+      <input type="text" id="userName" placeholder="जैसे: राम, Priya ...">
     </div>
-    
+
     <div class="form-group">
       <label for="userDesignation">पद / Designation</label>
       <input type="text" id="userDesignation" placeholder="जैसे: शिक्षक, अधिकारी, छात्र ...">
     </div>
-    
+
     <div class="form-group">
       <label for="userOffice">कार्यालय का नाम (Name of Office)</label>
       <input type="text" id="userOffice" placeholder="जैसे: SBI मुख्य शाखा">
     </div>
-    
+
     <div class="form-group">
       <label for="userMobile">मोबाइल नंबर (Mobile Number)</label>
       <input type="tel" id="userMobile" placeholder="उदा. 9876543210" maxlength="10">
     </div>
-    
+
     <div class="form-group">
-      <label for="userNumber">रोल नंबर (Roll Number) <span style="color:#b3363a;font-size:0.8rem;">*अद्वितीय</span></label>
+      <label for="userNumber">रोल नंबर (Roll Number) <span style="color:#b3363a;font-size:12px;">*अद्वितीय</span></label>
       <input type="number" id="userNumber" placeholder="उदा. 101" min="1">
     </div>
-    
+
     <div id="loginError" class="error-msg"></div>
     <button class="btn-login" id="loginBtn">▶ शुरू करें</button>
-    <div style="margin-top:1rem; text-align:right;">
+    <div style="margin-top:15px; text-align:right;">
       <span class="org-toggle" id="orgToggle">🔒 आयोजक दृश्य</span>
     </div>
   </div>
 
-  <div id="puzzlePage" class="tab-content active">
+  <!-- Puzzle Page -->
+  <div id="puzzlePage">
     <div class="header-row">
       <h1>🧩 शब्द पहेली</h1>
       <span class="timer" id="timerDisplay">30:00</span>
     </div>
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
       <span class="user-badge" id="userBadge">👤 </span>
-      <span style="font-size:0.8rem; color:#4a5f76;">व्यक्तिगत · 30 मिनट</span>
+      <span style="font-size:12px; color:#4a5f76;">व्यक्तिगत · 30 मिनट</span>
     </div>
 
     <div class="grid-container" id="crosswordGrid"></div>
@@ -250,8 +583,6 @@
       <div class="clue-col" id="downClues"><h3>▼ नीचे (Down)</h3></div>
     </div>
 
-    <div class="score-display" id="scoreDisplay"></div>
-
     <div class="action-bar">
       <button class="btn btn-success" id="submitBtn">📤 सबमिट करें</button>
     </div>
@@ -259,14 +590,13 @@
     <div class="footnote">* समय समाप्त होने पर स्वतः जमा · रोल नंबर केवल एक बार</div>
   </div>
 
+  <!-- Leaderboard Page -->
   <div id="leaderboardPage">
     <div class="lb-header">
       <h1>🏆 लीडरबोर्ड (आयोजक)</h1>
-      <div>
-        <button class="lb-refresh-btn" id="lbRefreshBtn">🔄 रिफ्रेश</button>
-      </div>
+      <button class="lb-refresh-btn" id="lbRefreshBtn">🔄 रिफ्रेश</button>
     </div>
-    <div class="lb-stats" id="lbStats">
+    <div class="lb-stats">
       <div class="lb-stat-card">
         <div class="num" id="lbTotal">0</div>
         <div class="label">कुल प्रतिभागी</div>
@@ -281,9 +611,9 @@
             <th>पद</th>
             <th>कार्यालय</th>
             <th>मोबाइल</th>
-            <th style="text-align:center; width:70px;">स्कोर</th>
-            <th style="text-align:center; width:70px;">कुल</th>
-            <th style="text-align:center; width:70px;">%</th>
+            <th style="text-align:center;">स्कोर</th>
+            <th style="text-align:center;">कुल</th>
+            <th style="text-align:center;">%</th>
             <th>समय</th>
             <th>जमा समय</th>
           </tr>
@@ -294,447 +624,544 @@
       </table>
     </div>
   </div>
+
 </div>
 
 <script>
-(function() {
-  const GAS_URL = 'https://script.google.com/macros/s/AKfycbzT8a-dgkOfVFgyNHEls7iOkfgOuPrq27nv0QG6OEM7e0U4JNLftsEGNIsf8AjzCNHW/exec';
+  (function() {
+    // ===== UPDATE THIS WITH YOUR GAS URL =====
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbzT8a-dgkOfVFgyNHEls7iOkfgOuPrq27nv0QG6OEM7e0U4JNLftsEGNIsf8AjzCNHW/exec';
 
-  const clues = {
-    across: [
-      { no: 1, text: "CHANGE (5)", answer: "परिवर्तन" },
-      { no: 2, text: "MATTER (3)", answer: "मामला" },
-      { no: 3, text: "PROFICIENT (3)", answer: "प्रवीण" },
-      { no: 4, text: "ACCORDINGLY (5)", answer: "तदनुसार" },
-      { no: 5, text: "PROOF (3)", answer: "प्रमाण" },
-      { no: 6, text: "STANDARD (3)", answer: "मानक" },
-      { no: 7, text: "APPROVAL (5)", answer: "अनुमोदन" },
-      { no: 15, text: "MORTGAGE (3)", answer: "बंधक" }
-    ],
-    down: [
-      { no: 8, text: "CUSTOM (3)", answer: "रिवाज़" },
-      { no: 9, text: "RENEWAL (5)", answer: "नवीकरण" },
-      { no: 10, text: "PROFIT (2)", answer: "लाभ" },
-      { no: 11, text: "AVERAGE (3)", answer: "औसत" },
-      { no: 12, text: "COMPLIANCE (5)", answer: "अनुपालन" },
-      { no: 13, text: "GENERAL (3)", answer: "सामान्य" },
-      { no: 14, text: "TEMPERATURE (4)", answer: "तापमान" },
-      { no: 4, text: "IMMEDIATE (3)", answer: "तत्काल" },
-      { no: 16, text: "INITIAL (4)", answer: "प्रारंभिक" }
-    ]
-  };
-
-  const solvedGrid = [
-    ['प', 'रि', 'व', 'र्त', 'न', 'मा', 'म', 'ला'],
-    ['औ', 'वा', '', 'प्र', 'वी', 'ण', 'अ', 'भ'],
-    ['स', 'ज़', 'बं', 'ध', 'क', '', 'नु', 'प्रा'],
-    ['त', 'द', 'नु', 'सा', 'र', 'ता', 'पा', 'रं'],
-    ['त्का', '', 'प्र', 'मा', 'ण', 'प', 'ल', 'भि'],
-    ['ल', '', '', 'न्य', '', 'मा', 'न', 'क'],
-    ['', 'अ', 'नु', 'मो', 'द', 'न', '', '']
-  ];
-
-  const numberMap = {
-    '0,0': 1, '0,1': 8, '0,4': 9, '0,5': 2, '0,7': 10,
-    '1,0': 11, '1,3': 3, '1,6': 12,
-    '2,2': 15, '2,7': 16,
-    '3,0': 4, '3,3': 13, '3,5': 14,
-    '4,2': 5,
-    '5,5': 6,
-    '6,1': 7
-  };
-
-  const ROWS = 7, COLS = 8;
-  let currentGrid = [];
-  let userName = '', userDesignation = '', userOffice = '', userMobile = '', userNumber = '';
-  let timerInterval = null;
-  let timeSeconds = 1800;
-  let isSubmitted = false, isTimerEnded = false;
-  let isOrganizer = false;
-
-  const loginPage = document.getElementById('loginPage');
-  const puzzlePage = document.getElementById('puzzlePage');
-  const leaderboardPage = document.getElementById('leaderboardPage');
-  const tabNav = document.getElementById('tabNav');
-  const leaderboardTabBtn = document.getElementById('leaderboardTabBtn');
-  const userNameInput = document.getElementById('userName');
-  const userDesignationInput = document.getElementById('userDesignation');
-  const userOfficeInput = document.getElementById('userOffice');
-  const userMobileInput = document.getElementById('userMobile');
-  const userNumberInput = document.getElementById('userNumber');
-  const loginError = document.getElementById('loginError');
-  const loginBtn = document.getElementById('loginBtn');
-  const userBadge = document.getElementById('userBadge');
-  const timerDisplay = document.getElementById('timerDisplay');
-  const gridContainer = document.getElementById('crosswordGrid');
-  const acrossContainer = document.getElementById('acrossClues');
-  const downContainer = document.getElementById('downClues');
-  const submitBtn = document.getElementById('submitBtn');
-  const statusMsg = document.getElementById('statusMsg');
-  const lbRefreshBtn = document.getElementById('lbRefreshBtn');
-  const lbTableBody = document.getElementById('lbTableBody');
-  const lbBadge = document.getElementById('lbBadge');
-  const lbTotal = document.getElementById('lbTotal');
-  const orgToggle = document.getElementById('orgToggle');
-
-  function buildEmptyGrid() {
-    const grid = [];
-    for (let r = 0; r < ROWS; r++) {
-      const row = [];
-      for (let c = 0; c < COLS; c++) {
-        const isBlock = (solvedGrid[r] && solvedGrid[r][c] === '');
-        row.push({ value: '', block: isBlock, number: numberMap[r+','+c] || null, row: r, col: c });
-      }
-      grid.push(row);
-    }
-    return grid;
-  }
-
-  function renderClues() {
-    acrossContainer.innerHTML = '<h3>▶ आर-पार (Across)</h3>';
-    clues.across.forEach(clue => {
-      const div = document.createElement('div');
-      div.className = 'clue-item';
-      div.innerHTML = '<span class="clue-no">'+clue.no+'</span><span class="clue-text">'+clue.text+'</span>';
-      acrossContainer.appendChild(div);
-    });
-    downContainer.innerHTML = '<h3>▼ नीचे (Down)</h3>';
-    clues.down.forEach(clue => {
-      const div = document.createElement('div');
-      div.className = 'clue-item';
-      div.innerHTML = '<span class="clue-no">'+clue.no+'</span><span class="clue-text">'+clue.text+'</span>';
-      downContainer.appendChild(div);
-    });
-  }
-
-  function renderGrid() {
-    gridContainer.innerHTML = '';
-    for (let r = 0; r < ROWS; r++) {
-      for (let c = 0; c < COLS; c++) {
-        const cell = currentGrid[r][c];
-        const div = document.createElement('div');
-        div.className = 'cell';
-        if (cell.block) {
-          div.classList.add('block');
-        } else {
-          if (cell.number) {
-            const numSpan = document.createElement('span');
-            numSpan.className = 'num';
-            numSpan.textContent = cell.number;
-            div.appendChild(numSpan);
-          }
-          const input = document.createElement('input');
-          input.type = 'text';
-          input.maxLength = 6;
-          input.value = cell.value || '';
-          input.dataset.row = r;
-          input.dataset.col = c;
-          if (isSubmitted || isTimerEnded) input.disabled = true;
-          input.addEventListener('input', function(e) {
-            if (isSubmitted || isTimerEnded) return;
-            const val = this.value.trim();
-            cell.value = val;
-          });
-          div.appendChild(input);
-        }
-        gridContainer.appendChild(div);
-      }
-    }
-  }
-
-  function calculateScore() {
-    let correct = 0, total = 0;
-    for (let r = 0; r < ROWS; r++) {
-      for (let c = 0; c < COLS; c++) {
-        const cell = currentGrid[r][c];
-        if (!cell.block) {
-          total++;
-          if (cell.value.trim() === (solvedGrid[r][c] || '')) correct++;
-        }
-      }
-    }
-    return { correct, total };
-  }
-
-  function showStatus(msg, type) {
-    statusMsg.textContent = msg;
-    statusMsg.className = 'status-msg ' + type;
-    statusMsg.style.display = 'block';
-  }
-  function hideStatus() { statusMsg.style.display = 'none'; }
-
-  function startTimer() {
-    if (timerInterval) clearInterval(timerInterval);
-    timeSeconds = 1800;
-    updateTimerDisplay();
-    timerInterval = setInterval(function() {
-      timeSeconds--;
-      updateTimerDisplay();
-      if (timeSeconds <= 0) {
-        clearInterval(timerInterval);
-        timerInterval = null;
-        isTimerEnded = true;
-        showStatus('⏰ समय समाप्त! स्वतः जमा किया जा रहा है...', 'error');
-        autoSubmit();
-      }
-    }, 1000);
-  }
-
-  function updateTimerDisplay() {
-    const mins = Math.floor(timeSeconds / 60);
-    const secs = timeSeconds % 60;
-    timerDisplay.textContent = (mins < 10 ? '0' : '') + mins + ':' + (secs < 10 ? '0' : '') + secs;
-    timerDisplay.style.color = timeSeconds < 60 ? '#e06060' : 'white';
-  }
-
-  function stopTimer() { if (timerInterval) { clearInterval(timerInterval); timerInterval = null; } }
-  function getElapsedTime() { return 1800 - timeSeconds; }
-
-  function autoSubmit() { if (!isSubmitted) doSubmit(true); }
-
-  function doSubmit(isAuto) {
-    if (isSubmitted) return;
-    const score = calculateScore();
-    const elapsed = getElapsedTime();
-    const gridData = [];
-    for (let r = 0; r < ROWS; r++) {
-      const row = [];
-      for (let c = 0; c < COLS; c++) row.push(currentGrid[r][c].value || '');
-      gridData.push(row);
-    }
-    const percentage = score.total > 0 ? Math.round((score.correct / score.total) * 100) : 0;
-
-    const payload = {
-      name: userName, number: userNumber, designation: userDesignation,
-      office: userOffice, mobile: userMobile,
-      score: score.correct, totalLetters: score.total,
-      duration: elapsed, percent: percentage,
-      auto: isAuto ? 'yes' : 'no',
-      grid: JSON.stringify(gridData)
+    // Crossword Data
+    const clues = {
+      across: [
+        { no: 1, text: "CHANGE (5)", answer: "परिवर्तन" },
+        { no: 2, text: "MATTER (3)", answer: "मामला" },
+        { no: 3, text: "PROFICIENT (3)", answer: "प्रवीण" },
+        { no: 4, text: "ACCORDINGLY (5)", answer: "तदनुसार" },
+        { no: 5, text: "PROOF (3)", answer: "प्रमाण" },
+        { no: 6, text: "STANDARD (3)", answer: "मानक" },
+        { no: 7, text: "APPROVAL (5)", answer: "अनुमोदन" },
+        { no: 15, text: "MORTGAGE (3)", answer: "बंधक" }
+      ],
+      down: [
+        { no: 8, text: "CUSTOM (3)", answer: "रिवाज़" },
+        { no: 9, text: "RENEWAL (5)", answer: "नवीकरण" },
+        { no: 10, text: "PROFIT (2)", answer: "लाभ" },
+        { no: 11, text: "AVERAGE (3)", answer: "औसत" },
+        { no: 12, text: "COMPLIANCE (5)", answer: "अनुपालन" },
+        { no: 13, text: "GENERAL (3)", answer: "सामान्य" },
+        { no: 14, text: "TEMPERATURE (4)", answer: "तापमान" },
+        { no: 4, text: "IMMEDIATE (3)", answer: "तत्काल" },
+        { no: 16, text: "INITIAL (4)", answer: "प्रारंभिक" }
+      ]
     };
 
-    fetch(GAS_URL + '?action=submitCrossword&payload=' + encodeURIComponent(JSON.stringify(payload)))
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        if (data.success) {
-          isSubmitted = true;
-          stopTimer();
-          submitBtn.disabled = true;
-          document.querySelectorAll('#crosswordGrid input').forEach(function(inp) { inp.disabled = true; });
-          showStatus('✅ सफलपूर्वक सबमिट कर दिया। हार्दिक शुभकामनाएं !!', 'success');
-          loadLeaderboardCount();
-          clearGridEntries();
-        } else {
-          showStatus('❌ जमा करने में त्रुटि: ' + data.error, 'error');
-        }
-      })
-      .catch(function(err) { showStatus('❌ नेटवर्क त्रुटि: ' + err.message, 'error'); });
-  }
+    const solvedGrid = [
+      ['प', 'रि', 'व', 'र्त', 'न', 'मा', 'म', 'ला'],
+      ['औ', 'वा', '', 'प्र', 'वी', 'ण', 'अ', 'भ'],
+      ['स', 'ज़', 'बं', 'ध', 'क', '', 'नु', 'प्रा'],
+      ['त', 'द', 'नु', 'सा', 'र', 'ता', 'पा', 'रं'],
+      ['त्का', '', 'प्र', 'मा', 'ण', 'प', 'ल', 'भि'],
+      ['ल', '', '', 'न्य', '', 'मा', 'न', 'क'],
+      ['', 'अ', 'नु', 'मो', 'द', 'न', '', '']
+    ];
 
-  function clearGridEntries() {
-    for (let r = 0; r < ROWS; r++) {
-      for (let c = 0; c < COLS; c++) {
-        const cell = currentGrid[r][c];
-        if (!cell.block) cell.value = '';
+    const numberMap = {
+      '0,0': 1, '0,1': 8, '0,4': 9, '0,5': 2, '0,7': 10,
+      '1,0': 11, '1,3': 3, '1,6': 12,
+      '2,2': 15, '2,7': 16,
+      '3,0': 4, '3,3': 13, '3,5': 14,
+      '4,2': 5,
+      '5,5': 6,
+      '6,1': 7
+    };
+
+    const ROWS = 7,
+      COLS = 8;
+
+    // State
+    let currentGrid = [];
+    let userName = '',
+      userDesignation = '',
+      userOffice = '',
+      userMobile = '',
+      userNumber = '';
+    let timerInterval = null;
+    let timeSeconds = 1800;
+    let isSubmitted = false,
+      isTimerEnded = false;
+    let isOrganizer = false;
+
+    // DOM Elements
+    const loginPage = document.getElementById('loginPage');
+    const puzzlePage = document.getElementById('puzzlePage');
+    const leaderboardPage = document.getElementById('leaderboardPage');
+    const tabNav = document.getElementById('tabNav');
+    const leaderboardTabBtn = document.getElementById('leaderboardTabBtn');
+    const userNameInput = document.getElementById('userName');
+    const userDesignationInput = document.getElementById('userDesignation');
+    const userOfficeInput = document.getElementById('userOffice');
+    const userMobileInput = document.getElementById('userMobile');
+    const userNumberInput = document.getElementById('userNumber');
+    const loginError = document.getElementById('loginError');
+    const loginBtn = document.getElementById('loginBtn');
+    const userBadge = document.getElementById('userBadge');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const gridContainer = document.getElementById('crosswordGrid');
+    const acrossContainer = document.getElementById('acrossClues');
+    const downContainer = document.getElementById('downClues');
+    const submitBtn = document.getElementById('submitBtn');
+    const statusMsg = document.getElementById('statusMsg');
+    const lbRefreshBtn = document.getElementById('lbRefreshBtn');
+    const lbTableBody = document.getElementById('lbTableBody');
+    const lbBadge = document.getElementById('lbBadge');
+    const lbTotal = document.getElementById('lbTotal');
+    const orgToggle = document.getElementById('orgToggle');
+
+    // Build empty grid
+    function buildEmptyGrid() {
+      const grid = [];
+      for (let r = 0; r < ROWS; r++) {
+        const row = [];
+        for (let c = 0; c < COLS; c++) {
+          const isBlock = (solvedGrid[r] && solvedGrid[r][c] === '');
+          row.push({
+            value: '',
+            block: isBlock,
+            number: numberMap[r + ',' + c] || null,
+            row: r,
+            col: c
+          });
+        }
+        grid.push(row);
+      }
+      return grid;
+    }
+
+    // Render clues
+    function renderClues() {
+      acrossContainer.innerHTML = '<h3>▶ आर-पार (Across)</h3>';
+      clues.across.forEach(function(clue) {
+        var div = document.createElement('div');
+        div.className = 'clue-item';
+        div.innerHTML = '<span class="clue-no">' + clue.no + '</span><span class="clue-text">' + clue.text + '</span>';
+        acrossContainer.appendChild(div);
+      });
+
+      downContainer.innerHTML = '<h3>▼ नीचे (Down)</h3>';
+      clues.down.forEach(function(clue) {
+        var div = document.createElement('div');
+        div.className = 'clue-item';
+        div.innerHTML = '<span class="clue-no">' + clue.no + '</span><span class="clue-text">' + clue.text + '</span>';
+        downContainer.appendChild(div);
+      });
+    }
+
+    // Render grid
+    function renderGrid() {
+      gridContainer.innerHTML = '';
+      for (var r = 0; r < ROWS; r++) {
+        for (var c = 0; c < COLS; c++) {
+          var cell = currentGrid[r][c];
+          var div = document.createElement('div');
+          div.className = 'cell';
+          if (cell.block) {
+            div.classList.add('block');
+          } else {
+            if (cell.number) {
+              var numSpan = document.createElement('span');
+              numSpan.className = 'num';
+              numSpan.textContent = cell.number;
+              div.appendChild(numSpan);
+            }
+            var input = document.createElement('input');
+            input.type = 'text';
+            input.maxLength = 6;
+            input.value = cell.value || '';
+            input.dataset.row = r;
+            input.dataset.col = c;
+            if (isSubmitted || isTimerEnded) input.disabled = true;
+            input.addEventListener('input', function(e) {
+              if (isSubmitted || isTimerEnded) return;
+              var val = this.value.trim();
+              var row = parseInt(this.dataset.row);
+              var col = parseInt(this.dataset.col);
+              currentGrid[row][col].value = val;
+            });
+            div.appendChild(input);
+          }
+          gridContainer.appendChild(div);
+        }
       }
     }
-    renderGrid();
-  }
 
-  function loadLeaderboard() {
-    lbRefreshBtn.disabled = true;
-    lbRefreshBtn.textContent = '⏳ लोड...';
-    lbTableBody.innerHTML = '<tr><td colspan="10" class="no-data"><div class="loading-spinner"></div> लोड हो रहा है...</td></tr>';
-    fetch(GAS_URL + '?action=getLeaderboard')
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        if (data.success) {
-          renderLeaderboard(data);
-          lbBadge.textContent = data.count || 0;
-          lbTotal.textContent = data.count || 0;
-        } else {
-          lbTableBody.innerHTML = '<tr><td colspan="10" class="no-data" style="color:#b3363a;">❌ ' + (data.error || 'Failed to load') + '</td></tr>';
+    // Calculate score
+    function calculateScore() {
+      var correct = 0,
+        total = 0;
+      for (var r = 0; r < ROWS; r++) {
+        for (var c = 0; c < COLS; c++) {
+          var cell = currentGrid[r][c];
+          if (!cell.block) {
+            total++;
+            if (cell.value.trim() === (solvedGrid[r][c] || '')) correct++;
+          }
         }
-      })
-      .catch(function(err) {
-        lbTableBody.innerHTML = '<tr><td colspan="10" class="no-data" style="color:#b3363a;">❌ नेटवर्क त्रुटि: ' + err.message + '</td></tr>';
-      })
-      .finally(function() {
-        lbRefreshBtn.disabled = false;
-        lbRefreshBtn.textContent = '🔄 रिफ्रेश';
-      });
-  }
-
-  function loadLeaderboardCount() {
-    fetch(GAS_URL + '?action=getLeaderboard')
-      .then(function(r) { return r.json(); })
-      .then(function(data) { if (data.success) lbBadge.textContent = data.count || 0; })
-      .catch(function() {});
-  }
-
-  function renderLeaderboard(data) {
-    const submissions = data.data || [];
-    if (submissions.length === 0) {
-      lbTableBody.innerHTML = '<tr><td colspan="10" class="no-data">📭 अभी कोई प्रतिभागी नहीं</td></tr>';
-      return;
+      }
+      return { correct: correct, total: total };
     }
-    let html = '';
-    submissions.forEach(function(row, index) {
-      const rank = index + 1;
-      const timeStr = row.timestamp ? row.timestamp.split('T')[0] + ' ' + row.timestamp.split('T')[1].substring(0,5) : '-';
-      html += '<tr>' +
-        '<td class="rank-col">' + rank + '</td>' +
-        '<td>' + escapeHtml(row.name) + '</td>' +
-        '<td>' + escapeHtml(row.designation || '-') + '</td>' +
-        '<td>' + escapeHtml(row.office || '-') + '</td>' +
-        '<td>' + escapeHtml(row.mobile || '-') + '</td>' +
-        '<td style="text-align:center; font-weight:700; color:#1e3a5f;">' + row.score + '</td>' +
-        '<td style="text-align:center; color:#4a5f76;">' + row.totalLetters + '</td>' +
-        '<td style="text-align:center; color:#4a5f76;">' + (row.percentage || 0) + '%</td>' +
-        '<td style="color:#4a5f76; font-size:0.85rem;">' + (row.duration || '-') + '</td>' +
-        '<td style="color:#4a5f76; font-size:0.75rem;">' + timeStr + '</td>' +
-        '</tr>';
-    });
-    lbTableBody.innerHTML = html;
-  }
 
-  function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-  }
-
-  function toggleOrganizer() {
-    isOrganizer = !isOrganizer;
-    if (isOrganizer) {
-      leaderboardTabBtn.style.display = 'inline-block';
-      orgToggle.textContent = '🔓 आयोजक दृश्य (सक्रिय)';
-      switchTab('leaderboard');
-      loadLeaderboard();
-    } else {
-      leaderboardTabBtn.style.display = 'none';
-      orgToggle.textContent = '🔒 आयोजक दृश्य';
-      switchTab('puzzle');
+    // Show status message
+    function showStatus(msg, type) {
+      statusMsg.textContent = msg;
+      statusMsg.className = 'status-msg ' + type;
+      statusMsg.style.display = 'block';
     }
-  }
 
-  function handleLogin() {
-    const name = userNameInput.value.trim();
-    const designation = userDesignationInput.value.trim();
-    const office = userOfficeInput.value.trim();
-    const mobile = userMobileInput.value.trim();
-    const num = userNumberInput.value.trim();
+    function hideStatus() {
+      statusMsg.style.display = 'none';
+    }
 
-    if (!name) { loginError.textContent = 'कृपया अपना नाम भरें।'; loginError.style.display = 'block'; return; }
-    if (!num) { loginError.textContent = 'कृपया रोल नंबर भरें।'; loginError.style.display = 'block'; return; }
-    loginError.style.display = 'none';
-    loginBtn.disabled = true;
-    loginBtn.textContent = '⏳ चेक कर रहे हैं...';
+    // Timer functions
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timeSeconds = 1800;
+      updateTimerDisplay();
+      timerInterval = setInterval(function() {
+        timeSeconds--;
+        updateTimerDisplay();
+        if (timeSeconds <= 0) {
+          clearInterval(timerInterval);
+          timerInterval = null;
+          isTimerEnded = true;
+          showStatus('⏰ समय समाप्त! स्वतः जमा किया जा रहा है...', 'error');
+          autoSubmit();
+        }
+      }, 1000);
+    }
 
-    fetch(GAS_URL + '?action=checkRoll&rollNumber=' + encodeURIComponent(num))
-      .then(function(r) { return r.json(); })
-      .then(function(result) {
-        if (result.exists) {
-          loginError.textContent = '❌ रोल नंबर ' + num + ' पहले से जमा है (' + result.name + ')';
+    function updateTimerDisplay() {
+      var mins = Math.floor(timeSeconds / 60);
+      var secs = timeSeconds % 60;
+      timerDisplay.textContent = (mins < 10 ? '0' : '') + mins + ':' + (secs < 10 ? '0' : '') + secs;
+      timerDisplay.style.color = timeSeconds < 60 ? '#e06060' : 'white';
+    }
+
+    function stopTimer() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+    }
+
+    function getElapsedTime() {
+      return 1800 - timeSeconds;
+    }
+
+    // Submit functions
+    function autoSubmit() {
+      if (!isSubmitted) doSubmit(true);
+    }
+
+    function doSubmit(isAuto) {
+      if (isSubmitted) return;
+      var score = calculateScore();
+      var elapsed = getElapsedTime();
+      var gridData = [];
+      for (var r = 0; r < ROWS; r++) {
+        var row = [];
+        for (var c = 0; c < COLS; c++) {
+          row.push(currentGrid[r][c].value || '');
+        }
+        gridData.push(row);
+      }
+      var percentage = score.total > 0 ? Math.round((score.correct / score.total) * 100) : 0;
+
+      var payload = {
+        name: userName,
+        number: userNumber,
+        designation: userDesignation,
+        office: userOffice,
+        mobile: userMobile,
+        score: score.correct,
+        totalLetters: score.total,
+        duration: elapsed,
+        percent: percentage,
+        auto: isAuto ? 'yes' : 'no',
+        grid: JSON.stringify(gridData)
+      };
+
+      fetch(GAS_URL + '?action=submitCrossword&payload=' + encodeURIComponent(JSON.stringify(payload)))
+        .then(function(response) { return response.json(); })
+        .then(function(data) {
+          if (data.success) {
+            isSubmitted = true;
+            stopTimer();
+            submitBtn.disabled = true;
+            var inputs = document.querySelectorAll('#crosswordGrid input');
+            for (var i = 0; i < inputs.length; i++) {
+              inputs[i].disabled = true;
+            }
+            showStatus('✅ सफलपूर्वक सबमिट कर दिया। हार्दिक शुभकामनाएं !!', 'success');
+            loadLeaderboardCount();
+            clearGridEntries();
+          } else {
+            showStatus('❌ जमा करने में त्रुटि: ' + data.error, 'error');
+          }
+        })
+        .catch(function(err) {
+          showStatus('❌ नेटवर्क त्रुटि: ' + err.message, 'error');
+        });
+    }
+
+    function clearGridEntries() {
+      for (var r = 0; r < ROWS; r++) {
+        for (var c = 0; c < COLS; c++) {
+          var cell = currentGrid[r][c];
+          if (!cell.block) cell.value = '';
+        }
+      }
+      renderGrid();
+    }
+
+    // Leaderboard functions
+    function loadLeaderboard() {
+      lbRefreshBtn.disabled = true;
+      lbRefreshBtn.textContent = '⏳ लोड...';
+      lbTableBody.innerHTML = '<tr><td colspan="10" class="no-data"><div class="loading-spinner"></div> लोड हो रहा है...</td></tr>';
+
+      fetch(GAS_URL + '?action=getLeaderboard')
+        .then(function(response) { return response.json(); })
+        .then(function(data) {
+          if (data.success) {
+            renderLeaderboard(data);
+            lbBadge.textContent = data.count || 0;
+            lbTotal.textContent = data.count || 0;
+          } else {
+            lbTableBody.innerHTML = '<tr><td colspan="10" class="no-data" style="color:#b3363a;">❌ ' + (data.error || 'Failed to load') + '</td></tr>';
+          }
+        })
+        .catch(function(err) {
+          lbTableBody.innerHTML = '<tr><td colspan="10" class="no-data" style="color:#b3363a;">❌ नेटवर्क त्रुटि: ' + err.message + '</td></tr>';
+        })
+        .finally(function() {
+          lbRefreshBtn.disabled = false;
+          lbRefreshBtn.textContent = '🔄 रिफ्रेश';
+        });
+    }
+
+    function loadLeaderboardCount() {
+      fetch(GAS_URL + '?action=getLeaderboard')
+        .then(function(response) { return response.json(); })
+        .then(function(data) {
+          if (data.success) lbBadge.textContent = data.count || 0;
+        })
+        .catch(function() {});
+    }
+
+    function renderLeaderboard(data) {
+      var submissions = data.data || [];
+      if (submissions.length === 0) {
+        lbTableBody.innerHTML = '<tr><td colspan="10" class="no-data">📭 अभी कोई प्रतिभागी नहीं</td></tr>';
+        return;
+      }
+      var html = '';
+      for (var i = 0; i < submissions.length; i++) {
+        var row = submissions[i];
+        var rank = i + 1;
+        var timeStr = row.timestamp ? row.timestamp.split('T')[0] + ' ' + row.timestamp.split('T')[1].substring(0, 5) : '-';
+        html += '<tr>' +
+          '<td class="rank-col">' + rank + '</td>' +
+          '<td>' + escapeHtml(row.name) + '</td>' +
+          '<td>' + escapeHtml(row.designation || '-') + '</td>' +
+          '<td>' + escapeHtml(row.office || '-') + '</td>' +
+          '<td>' + escapeHtml(row.mobile || '-') + '</td>' +
+          '<td style="text-align:center; font-weight:700; color:#1e3a5f;">' + row.score + '</td>' +
+          '<td style="text-align:center; color:#4a5f76;">' + row.totalLetters + '</td>' +
+          '<td style="text-align:center; color:#4a5f76;">' + (row.percentage || 0) + '%</td>' +
+          '<td style="color:#4a5f76; font-size:13px;">' + (row.duration || '-') + '</td>' +
+          '<td style="color:#4a5f76; font-size:12px;">' + timeStr + '</td>' +
+          '</tr>';
+      }
+      lbTableBody.innerHTML = html;
+    }
+
+    function escapeHtml(text) {
+      var div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Organizer toggle
+    function toggleOrganizer() {
+      isOrganizer = !isOrganizer;
+      if (isOrganizer) {
+        leaderboardTabBtn.style.display = 'inline-block';
+        orgToggle.textContent = '🔓 आयोजक दृश्य (सक्रिय)';
+        switchTab('leaderboard');
+        loadLeaderboard();
+      } else {
+        leaderboardTabBtn.style.display = 'none';
+        orgToggle.textContent = '🔒 आयोजक दृश्य';
+        switchTab('puzzle');
+      }
+    }
+
+    // Login
+    function handleLogin() {
+      var name = userNameInput.value.trim();
+      var designation = userDesignationInput.value.trim();
+      var office = userOfficeInput.value.trim();
+      var mobile = userMobileInput.value.trim();
+      var num = userNumberInput.value.trim();
+
+      if (!name) {
+        loginError.textContent = 'कृपया अपना नाम भरें।';
+        loginError.style.display = 'block';
+        return;
+      }
+      if (!num) {
+        loginError.textContent = 'कृपया रोल नंबर भरें।';
+        loginError.style.display = 'block';
+        return;
+      }
+      loginError.style.display = 'none';
+      loginBtn.disabled = true;
+      loginBtn.textContent = '⏳ चेक कर रहे हैं...';
+
+      fetch(GAS_URL + '?action=checkRoll&rollNumber=' + encodeURIComponent(num))
+        .then(function(response) { return response.json(); })
+        .then(function(result) {
+          if (result.exists) {
+            loginError.textContent = '❌ रोल नंबर ' + num + ' पहले से जमा है (' + result.name + ')';
+            loginError.style.display = 'block';
+            loginBtn.disabled = false;
+            loginBtn.textContent = '▶ शुरू करें';
+            return;
+          }
+          userName = name;
+          userDesignation = designation;
+          userOffice = office;
+          userMobile = mobile;
+          userNumber = num;
+          userBadge.innerHTML = '👤 ' + userName + ' (रोल: ' + userNumber + ')';
+
+          currentGrid = buildEmptyGrid();
+          isSubmitted = false;
+          isTimerEnded = false;
+          hideStatus();
+          submitBtn.disabled = false;
+          renderClues();
+          renderGrid();
+
+          loginPage.style.display = 'none';
+          tabNav.style.display = 'flex';
+          puzzlePage.style.display = 'block';
+          leaderboardPage.style.display = 'none';
+          leaderboardTabBtn.style.display = 'none';
+
+          var tabs = document.querySelectorAll('.tab-btn');
+          for (var i = 0; i < tabs.length; i++) {
+            tabs[i].classList.remove('active');
+          }
+          document.querySelector('[data-tab="puzzle"]').classList.add('active');
+
+          startTimer();
+          loadLeaderboardCount();
+
+          loginBtn.disabled = false;
+          loginBtn.textContent = '▶ शुरू करें';
+        })
+        .catch(function(err) {
+          loginError.textContent = '❌ त्रुटि: ' + err.message;
           loginError.style.display = 'block';
           loginBtn.disabled = false;
           loginBtn.textContent = '▶ शुरू करें';
-          return;
-        }
-        userName = name;
-        userDesignation = designation;
-        userOffice = office;
-        userMobile = mobile;
-        userNumber = num;
-        userBadge.innerHTML = '👤 ' + userName + ' (रोल: ' + userNumber + ')';
-
-        currentGrid = buildEmptyGrid();
-        isSubmitted = false;
-        isTimerEnded = false;
-        hideStatus();
-        submitBtn.disabled = false;
-        renderClues();
-        renderGrid();
-
-        loginPage.style.display = 'none';
-        tabNav.style.display = 'flex';
-        puzzlePage.style.display = 'block';
-        leaderboardPage.style.display = 'none';
-        leaderboardTabBtn.style.display = 'none';
-        document.querySelectorAll('.tab-btn').forEach(function(btn) { btn.classList.remove('active'); });
-        document.querySelector('[data-tab="puzzle"]').classList.add('active');
-
-        startTimer();
-        loadLeaderboardCount();
-
-        loginBtn.disabled = false;
-        loginBtn.textContent = '▶ शुरू करें';
-      })
-      .catch(function(err) {
-        loginError.textContent = '❌ त्रुटि: ' + err.message;
-        loginError.style.display = 'block';
-        loginBtn.disabled = false;
-        loginBtn.textContent = '▶ शुरू करें';
-      });
-  }
-
-  function switchTab(tabId) {
-    document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.remove('active'); });
-    var target = document.getElementById(tabId + 'Page');
-    if (target) target.classList.add('active');
-    document.querySelectorAll('.tab-btn').forEach(function(btn) {
-      btn.classList.toggle('active', btn.dataset.tab === tabId);
-    });
-    if (tabId === 'leaderboard') {
-      leaderboardPage.style.display = 'block';
-      loadLeaderboard();
-    } else {
-      leaderboardPage.style.display = 'none';
+        });
     }
-  }
 
-  function handleLogout() {
-    stopTimer();
-    isSubmitted = true;
-    loginPage.style.display = 'block';
-    tabNav.style.display = 'none';
-    puzzlePage.style.display = 'none';
-    leaderboardPage.style.display = 'none';
-    leaderboardTabBtn.style.display = 'none';
-    isOrganizer = false;
-    orgToggle.textContent = '🔒 आयोजक दृश्य';
-    userName = userDesignation = userOffice = userMobile = userNumber = '';
-    userNameInput.value = '';
-    userDesignationInput.value = '';
-    userOfficeInput.value = '';
-    userMobileInput.value = '';
-    userNumberInput.value = '';
-    hideStatus();
-    if (timerInterval) clearInterval(timerInterval);
-    document.querySelectorAll('.tab-btn').forEach(function(btn) { btn.classList.remove('active'); });
-  }
+    // Tab switching
+    function switchTab(tabId) {
+      var contents = document.querySelectorAll('.tab-content');
+      for (var i = 0; i < contents.length; i++) {
+        contents[i].classList.remove('active');
+      }
+      var target = document.getElementById(tabId + 'Page');
+      if (target) target.classList.add('active');
 
-  loginBtn.addEventListener('click', handleLogin);
-  userNameInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') handleLogin(); });
-  userNumberInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') handleLogin(); });
+      var tabs = document.querySelectorAll('.tab-btn');
+      for (var j = 0; j < tabs.length; j++) {
+        tabs[j].classList.toggle('active', tabs[j].dataset.tab === tabId);
+      }
 
-  submitBtn.addEventListener('click', function() { doSubmit(false); });
+      if (tabId === 'leaderboard') {
+        leaderboardPage.style.display = 'block';
+        loadLeaderboard();
+      } else {
+        leaderboardPage.style.display = 'none';
+      }
+    }
 
-  document.querySelectorAll('.tab-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      var tab = this.dataset.tab;
-      if (tab === 'login') handleLogout();
-      else if (tab === 'leaderboard' && isOrganizer) switchTab('leaderboard');
-      else if (tab === 'puzzle') switchTab('puzzle');
+    // Logout
+    function handleLogout() {
+      stopTimer();
+      isSubmitted = true;
+      loginPage.style.display = 'block';
+      tabNav.style.display = 'none';
+      puzzlePage.style.display = 'none';
+      leaderboardPage.style.display = 'none';
+      leaderboardTabBtn.style.display = 'none';
+      isOrganizer = false;
+      orgToggle.textContent = '🔒 आयोजक दृश्य';
+      userName = userDesignation = userOffice = userMobile = userNumber = '';
+      userNameInput.value = '';
+      userDesignationInput.value = '';
+      userOfficeInput.value = '';
+      userMobileInput.value = '';
+      userNumberInput.value = '';
+      hideStatus();
+      if (timerInterval) clearInterval(timerInterval);
+      var tabs = document.querySelectorAll('.tab-btn');
+      for (var i = 0; i < tabs.length; i++) {
+        tabs[i].classList.remove('active');
+      }
+    }
+
+    // Event listeners
+    loginBtn.addEventListener('click', handleLogin);
+    userNameInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') handleLogin();
     });
-  });
+    userNumberInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') handleLogin();
+    });
 
-  lbRefreshBtn.addEventListener('click', loadLeaderboard);
-  orgToggle.addEventListener('click', toggleOrganizer);
+    submitBtn.addEventListener('click', function() {
+      doSubmit(false);
+    });
 
-  renderClues();
-  console.log('🧩 Crossword ready. Use login to start.');
-})();
+    var tabButtons = document.querySelectorAll('.tab-btn');
+    for (var i = 0; i < tabButtons.length; i++) {
+      tabButtons[i].addEventListener('click', function() {
+        var tab = this.dataset.tab;
+        if (tab === 'login') {
+          handleLogout();
+        } else if (tab === 'leaderboard' && isOrganizer) {
+          switchTab('leaderboard');
+        } else if (tab === 'puzzle') {
+          switchTab('puzzle');
+        }
+      });
+    }
+
+    lbRefreshBtn.addEventListener('click', loadLeaderboard);
+    orgToggle.addEventListener('click', toggleOrganizer);
+
+    // Init
+    renderClues();
+    console.log('🧩 Crossword ready. Update GAS_URL and use login to start.');
+  })();
 </script>
 </body>
 </html>
