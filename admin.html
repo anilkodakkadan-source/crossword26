@@ -262,13 +262,15 @@ function render() {
 
     var medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
 
-    tr.innerHTML =
+        tr.innerHTML =
       '<td class="rank-col">' + rank + ' <span class="medal">' + medal + '</span></td>' +
       '<td>' + esc(r.name) + '</td>' +
       '<td>' + esc(r.rollNumber) + '</td>' +
       '<td>' + esc(r.designation) + '</td>' +
+      '<td>' + esc(r.module) + '</td>' +
       '<td>' + esc(r.office) + '</td>' +
       '<td>' + esc(r.mobile) + '</td>' +
+      '<td>' + esc(r.motherTongue) + '</td>' +
       '<td style="text-align:center;font-weight:700;color:#1e3a5f;">' + (r.score || 0) + '</td>' +
       '<td style="text-align:center;">' + (r.totalLetters || 0) + '</td>' +
       '<td style="text-align:center;">' + (r.percentage || 0) + '%</td>' +
