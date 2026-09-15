@@ -298,6 +298,16 @@
       </select>
     </div>
 
+    <div class="form-group">
+      <label for="userMotherTongue">मातृभाषा / Mother Tongue *</label>
+      <select id="userMotherTongue">
+        <option value="">-- चुनें / Select --</option>
+        <option>MALAYALAM</option>
+        <option>HINDI</option>
+        <option>OTHERS</option>
+      </select>
+    </div>
+
     <div id="loginError" class="error-msg"></div>
     <button class="btn-login" id="loginBtn">▶ शुरू करें</button>
   </div>
@@ -382,7 +392,7 @@
     const ROWS = 7, COLS = 8;
 
     let currentGrid = [];
-    let userName = '', userDesignation = '', userOffice = '', userMobile = '', userNumber = '', userModule = '';
+    let userName = '', userDesignation = '', userOffice = '', userMobile = '', userNumber = '', userModule = '', userMotherTongue = '';
     let timerInterval = null;
     let timeSeconds = 1800;
     let isSubmitted = false, isTimerEnded = false;
@@ -393,6 +403,7 @@
     const userDesignationInput = document.getElementById('userDesignation');
     const userOfficeInput = document.getElementById('userOffice');
     const userModuleInput = document.getElementById('userModule');
+    const userMotherTongueInput = document.getElementById('userMotherTongue');
     const userMobileInput = document.getElementById('userMobile');
     const userNumberInput = document.getElementById('userNumber');
     const loginError = document.getElementById('loginError');
@@ -562,6 +573,7 @@
         module: userModule,
         office: userOffice,
         mobile: userMobile,
+        motherTongue: userMotherTongue,
         score: score.correct,
         totalLetters: score.total,
         duration: elapsed,
@@ -605,6 +617,7 @@
       var designation = userDesignationInput.value.trim();
       var office = userOfficeInput.value;
       var module = userModuleInput.value;
+      var motherTongue = userMotherTongueInput.value;
       var mobile = userMobileInput.value.trim();
       var num = userNumberInput.value.trim();
 
@@ -629,4 +642,77 @@
         return;
       }
       if (!module) {
-        loginError.textContent =
+        loginError.textContent = 'कृपया मॉड्यूल चुनें। / Please select Module.';
+        loginError.style.display = 'block';
+        return;
+      }
+      if (!office) {
+        loginError.textContent = 'कृपया कार्यालय चुनें। / Please select Office.';
+        loginError.style.display = 'block';
+        return;
+      }
+      if (!motherTongue) {
+        loginError.textContent = 'कृपया मातृभाषा चुनें। / Please select Mother Tongue.';
+        loginError.style.display = 'block';
+        return;
+      }
+
+      loginError.style.display = 'none';
+      loginBtn.disabled = true;
+      loginBtn.textContent = '⏳ चेक कर रहे हैं...';
+
+      fetch(GAS_URL + '?action=checkRoll&rollNumber=' + encodeURIComponent(num))
+        .then(function(response) { return response.json(); })
+        .then(function(result) {
+          if (result.exists) {
+            loginError.textContent = '❌ यह कर्मचारी संख्या पहले से जमा है / This Emp. Number has already been submitted (' + result.name + ')';
+            loginError.style.display = 'block';
+            loginBtn.disabled = false;
+            loginBtn.textContent = '▶ शुरू करें';
+            return;
+          }
+          userName = name;
+          userDesignation = designation;
+          userOffice = office;
+          userMobile = mobile;
+          userNumber = num;
+          userModule = module;
+          userMotherTongue = motherTongue;
+
+          userBadge.innerHTML = '👤 ' + userName + ' (Emp: ' + userNumber + ')';
+
+          currentGrid = buildEmptyGrid();
+          isSubmitted = false;
+          isTimerEnded = false;
+          hideStatus();
+          submitBtn.disabled = false;
+          renderClues();
+          renderGrid();
+
+          loginPage.style.display = 'none';
+          puzzlePage.style.display = 'block';
+
+          startTimer();
+
+          loginBtn.disabled = false;
+          loginBtn.textContent = '▶ शुरू करें';
+        })
+        .catch(function(err) {
+          loginError.textContent = '❌ त्रुटि: ' + err.message;
+          loginError.style.display = 'block';
+          loginBtn.disabled = false;
+          loginBtn.textContent = '▶ शुरू करें';
+        });
+    }
+
+    loginBtn.addEventListener('click', handleLogin);
+    userNameInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') handleLogin(); });
+    userNumberInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') handleLogin(); });
+
+    submitBtn.addEventListener('click', function() { doSubmit(false); });
+
+    renderClues();
+  })();
+</script>
+</body>
+</html>
