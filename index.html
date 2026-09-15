@@ -29,7 +29,7 @@
     #loginPage .sub { text-align: center; color: #5a6f84; margin-bottom: 25px; font-size: 14px; }
     .form-group { margin-bottom: 18px; }
     .form-group label { display: block; font-weight: 600; color: #1f3857; margin-bottom: 5px; font-size: 14px; }
-    .form-group input {
+    .form-group input, .form-group select {
       width: 100%;
       padding: 12px 15px;
       border: 2px solid #d7e0eb;
@@ -39,14 +39,22 @@
       font-family: inherit;
       background: white;
     }
-    .form-group input:focus {
+    .form-group input:focus, .form-group select:focus {
       outline: none;
       border-color: #1e3a5f;
       box-shadow: 0 0 0 3px rgba(30,58,95,0.15);
     }
-    .form-group input[type="number"] { -moz-appearance: textfield; }
-    .form-group input[type="number"]::-webkit-outer-spin-button,
-    .form-group input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .form-group select {
+      cursor: pointer;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231e3a5f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 15px center;
+      background-size: 16px;
+      padding-right: 40px;
+    }
     .btn-login {
       width: 100%;
       padding: 14px;
@@ -248,28 +256,46 @@
     <p class="sub">व्यक्तिगत प्रतियोगिता · CROSSWORD 2026</p>
 
     <div class="form-group">
-      <label for="userName">आपका नाम (Your Name)</label>
-      <input type="text" id="userName" placeholder="जैसे: राम, Priya ...">
+      <label for="userName">नाम / Name *</label>
+      <input type="text" id="userName" placeholder="अपना नाम लिखें / Enter your name">
     </div>
 
     <div class="form-group">
-      <label for="userDesignation">पद / Designation</label>
-      <input type="text" id="userDesignation" placeholder="जैसे: शिक्षक, अधिकारी, छात्र ...">
+      <label for="userDesignation">पद / Designation *</label>
+      <input type="text" id="userDesignation" placeholder="Designation">
     </div>
 
     <div class="form-group">
-      <label for="userOffice">कार्यालय का नाम (Name of Office)</label>
-      <input type="text" id="userOffice" placeholder="जैसे: SBI मुख्य शाखा">
+      <label for="userNumber">कर्मचारी संख्या / Emp. Number * <span style="color:#b3363a;font-size:12px;">(7 अंक, अद्वितीय)</span></label>
+      <input type="tel" id="userNumber" placeholder="7-digit Employee Number" maxlength="7">
     </div>
 
     <div class="form-group">
-      <label for="userMobile">मोबाइल नंबर (Mobile Number)</label>
-      <input type="tel" id="userMobile" placeholder="उदा. 9876543210" maxlength="10">
+      <label for="userMobile">मोबाइल / Mobile Number *</label>
+      <input type="tel" id="userMobile" placeholder="10-digit mobile" maxlength="10">
     </div>
 
     <div class="form-group">
-      <label for="userNumber">रोल नंबर (Roll Number) <span style="color:#b3363a;font-size:12px;">*7 अंकों का, अद्वितीय</span></label>
-      <input type="tel" id="userNumber" placeholder="7-digit roll number" maxlength="7">
+      <label for="userModule">मॉड्यूल / Module *</label>
+      <select id="userModule">
+        <option value="">-- चुनें / Select --</option>
+        <option>KOZHIKODE</option>
+        <option>THRISSUR</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="userOffice">कार्यालय / Office *</label>
+      <select id="userOffice">
+        <option value="">-- चुनें / Select --</option>
+        <option>RBO-1</option>
+        <option>RBO-2</option>
+        <option>RBO-3</option>
+        <option>RBO-4</option>
+        <option>RBO-5</option>
+        <option>RBO-6</option>
+        <option>AO</option>
+      </select>
     </div>
 
     <div id="loginError" class="error-msg"></div>
@@ -298,14 +324,14 @@
       <button class="btn btn-success" id="submitBtn">📤 सबमिट करें</button>
     </div>
     <div id="statusMsg" class="status-msg"></div>
-    <div class="footnote">* समय समाप्त होने पर स्वतः जमा · रोल नंबर केवल एक बार</div>
+    <div class="footnote">* समय समाप्त होने पर स्वतः जमा · कर्मचारी संख्या केवल एक बार</div>
   </div>
 
 </div>
 
 <script>
   (function() {
-    // ===== UPDATE THIS WITH YOUR GAS URL =====
+    // ===== YOUR GAS URL =====
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbzT8a-dgkOfVFgyNHEls7iOkfgOuPrq27nv0QG6OEM7e0U4JNLftsEGNIsf8AjzCNHW/exec';
 
     // Crossword Data
@@ -356,7 +382,7 @@
     const ROWS = 7, COLS = 8;
 
     let currentGrid = [];
-    let userName = '', userDesignation = '', userOffice = '', userMobile = '', userNumber = '';
+    let userName = '', userDesignation = '', userOffice = '', userMobile = '', userNumber = '', userModule = '';
     let timerInterval = null;
     let timeSeconds = 1800;
     let isSubmitted = false, isTimerEnded = false;
@@ -366,6 +392,7 @@
     const userNameInput = document.getElementById('userName');
     const userDesignationInput = document.getElementById('userDesignation');
     const userOfficeInput = document.getElementById('userOffice');
+    const userModuleInput = document.getElementById('userModule');
     const userMobileInput = document.getElementById('userMobile');
     const userNumberInput = document.getElementById('userNumber');
     const loginError = document.getElementById('loginError');
@@ -532,6 +559,7 @@
         name: userName,
         number: userNumber,
         designation: userDesignation,
+        module: userModule,
         office: userOffice,
         mobile: userMobile,
         score: score.correct,
@@ -575,84 +603,30 @@
     function handleLogin() {
       var name = userNameInput.value.trim();
       var designation = userDesignationInput.value.trim();
-      var office = userOfficeInput.value.trim();
+      var office = userOfficeInput.value;
+      var module = userModuleInput.value;
       var mobile = userMobileInput.value.trim();
       var num = userNumberInput.value.trim();
 
       if (!name) {
-        loginError.textContent = 'कृपया अपना नाम भरें।';
+        loginError.textContent = 'कृपया अपना नाम भरें। / Please enter your name.';
         loginError.style.display = 'block';
         return;
       }
-      if (!num) {
-        loginError.textContent = 'कृपया रोल नंबर भरें।';
+      if (!designation) {
+        loginError.textContent = 'कृपया पद भरें। / Please enter your designation.';
         loginError.style.display = 'block';
         return;
       }
       if (!/^[0-9]{7}$/.test(num)) {
-        loginError.textContent = 'रोल नंबर ठीक 7 अंकों का होना चाहिए।';
+        loginError.textContent = 'कर्मचारी संख्या ठीक 7 अंकों की होनी चाहिए। / Emp. Number must be exactly 7 digits.';
         loginError.style.display = 'block';
         return;
       }
-      if (mobile && !/^[0-9]{10}$/.test(mobile)) {
-        loginError.textContent = 'मोबाइल नंबर 10 अंकों का होना चाहिए।';
+      if (!/^[0-9]{10}$/.test(mobile)) {
+        loginError.textContent = 'मोबाइल नंबर ठीक 10 अंकों का होना चाहिए। / Mobile must be exactly 10 digits.';
         loginError.style.display = 'block';
         return;
       }
-
-      loginError.style.display = 'none';
-      loginBtn.disabled = true;
-      loginBtn.textContent = '⏳ चेक कर रहे हैं...';
-
-      fetch(GAS_URL + '?action=checkRoll&rollNumber=' + encodeURIComponent(num))
-        .then(function(response) { return response.json(); })
-        .then(function(result) {
-          if (result.exists) {
-            loginError.textContent = '❌ रोल नंबर ' + num + ' पहले से जमा है (' + result.name + ')';
-            loginError.style.display = 'block';
-            loginBtn.disabled = false;
-            loginBtn.textContent = '▶ शुरू करें';
-            return;
-          }
-          userName = name;
-          userDesignation = designation;
-          userOffice = office;
-          userMobile = mobile;
-          userNumber = num;
-          userBadge.innerHTML = '👤 ' + userName + ' (रोल: ' + userNumber + ')';
-
-          currentGrid = buildEmptyGrid();
-          isSubmitted = false;
-          isTimerEnded = false;
-          hideStatus();
-          submitBtn.disabled = false;
-          renderClues();
-          renderGrid();
-
-          loginPage.style.display = 'none';
-          puzzlePage.style.display = 'block';
-
-          startTimer();
-
-          loginBtn.disabled = false;
-          loginBtn.textContent = '▶ शुरू करें';
-        })
-        .catch(function(err) {
-          loginError.textContent = '❌ त्रुटि: ' + err.message;
-          loginError.style.display = 'block';
-          loginBtn.disabled = false;
-          loginBtn.textContent = '▶ शुरू करें';
-        });
-    }
-
-    loginBtn.addEventListener('click', handleLogin);
-    userNameInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') handleLogin(); });
-    userNumberInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') handleLogin(); });
-
-    submitBtn.addEventListener('click', function() { doSubmit(false); });
-
-    renderClues();
-  })();
-</script>
-</body>
-</html>
+      if (!module) {
+        loginError.textContent =
