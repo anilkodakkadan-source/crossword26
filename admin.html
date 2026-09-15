@@ -52,7 +52,7 @@
   button:disabled { background: #6a7f94; cursor: not-allowed; transform: none; box-shadow: 0 3px 0 #4a5a6a; }
 
   .controls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; align-items: center; }
-  .controls input {
+  .controls input, .controls select {
     font-family: inherit;
     font-size: 14px;
     padding: 10px 14px;
@@ -61,9 +61,24 @@
     background: #fff;
     outline: none;
     transition: 0.15s;
+    cursor: pointer;
   }
-  .controls input:focus { border-color: #1e3a5f; box-shadow: 0 0 0 3px rgba(30,58,95,0.15); }
-  .controls .search { flex: 1; min-width: 200px; }
+  .controls select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231e3a5f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 14px;
+    padding-right: 34px;
+    min-width: 160px;
+  }
+  .controls input:focus, .controls select:focus {
+    border-color: #1e3a5f;
+    box-shadow: 0 0 0 3px rgba(30,58,95,0.15);
+  }
+  .controls .search { flex: 1; min-width: 200px; cursor: text; }
 
   .stats {
     display: grid;
@@ -131,6 +146,7 @@
     .wrap { padding: 18px 14px 24px; }
     h1 { font-size: 18px; }
     th, td { padding: 8px 8px; font-size: 12px; }
+    .controls select { min-width: 100%; }
   }
 </style>
 </head>
@@ -144,7 +160,22 @@
   <div class="sub">Winner = highest score, ties broken by fastest time</div>
 
   <div class="controls">
-    <input class="search" id="searchBox" type="text" placeholder="Search by name or roll number..." />
+    <select id="filterModule">
+      <option value="">All Modules</option>
+      <option value="KOZHIKODE">KOZHIKODE</option>
+      <option value="THRISSUR">THRISSUR</option>
+    </select>
+    <select id="filterOffice">
+      <option value="">All Offices</option>
+      <option value="RBO-1">RBO-1</option>
+      <option value="RBO-2">RBO-2</option>
+      <option value="RBO-3">RBO-3</option>
+      <option value="RBO-4">RBO-4</option>
+      <option value="RBO-5">RBO-5</option>
+      <option value="RBO-6">RBO-6</option>
+      <option value="AO">AO</option>
+    </select>
+    <input class="search" id="searchBox" type="text" placeholder="Search by name or Emp No..." />
   </div>
 
   <div class="stats">
@@ -159,7 +190,7 @@
   <div class="table-wrap hidden" id="tableWrap">
     <table>
       <thead>
-                <tr>
+        <tr>
           <th class="rank-col">Rank</th>
           <th>Name</th>
           <th>Emp No</th>
@@ -216,9 +247,14 @@ function loadLeaderboard() {
 }
 
 function render() {
+  var moduleFilter = document.getElementById('filterModule').value;
+  var officeFilter = document.getElementById('filterOffice').value;
   var search = document.getElementById('searchBox').value.trim().toLowerCase();
+
   var rows = allRows.slice();
 
+  if (moduleFilter) rows = rows.filter(function(r) { return r.module === moduleFilter; });
+  if (officeFilter) rows = rows.filter(function(r) { return r.office === officeFilter; });
   if (search) {
     rows = rows.filter(function(r) {
       return (r.name || '').toLowerCase().indexOf(search) !== -1
@@ -248,7 +284,7 @@ function render() {
 
   if (!rows.length) {
     var trEmpty = document.createElement('tr');
-    trEmpty.innerHTML = '<td colspan="11" class="msg">No matching entries yet.</td>';
+    trEmpty.innerHTML = '<td colspan="13" class="msg">No matching entries yet.</td>';
     tbody.appendChild(trEmpty);
     return;
   }
@@ -262,7 +298,7 @@ function render() {
 
     var medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
 
-        tr.innerHTML =
+    tr.innerHTML =
       '<td class="rank-col">' + rank + ' <span class="medal">' + medal + '</span></td>' +
       '<td>' + esc(r.name) + '</td>' +
       '<td>' + esc(r.rollNumber) + '</td>' +
@@ -289,6 +325,8 @@ function esc(s) {
 }
 
 document.getElementById('refreshBtn').addEventListener('click', loadLeaderboard);
+document.getElementById('filterModule').addEventListener('change', render);
+document.getElementById('filterOffice').addEventListener('change', render);
 document.getElementById('searchBox').addEventListener('input', render);
 
 setInterval(loadLeaderboard, 30000);
