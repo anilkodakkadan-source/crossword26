@@ -82,7 +82,7 @@
       display: none;
     }
 
-    /* Window banner (NEW) */
+    /* Window banner */
     #windowBanner {
       display: none;
       background: white;
@@ -304,7 +304,7 @@
 <body>
 <div class="container">
 
-  <!-- Window Banner (NEW) -->
+  <!-- Window Banner -->
   <div id="windowBanner">
     <h2>🧩 शब्द पहेली</h2>
     <p id="windowMessage"></p>
@@ -463,8 +463,8 @@
     let timeSeconds = 1800;
     let isSubmitted = false, isTimerEnded = false;
 
-    // ---- NEW: window / start time tracking ----
-    let crosswordStartTime = null;   // ISO string from server
+    // ---- Window / start time tracking ----
+    let crosswordStartTime = null;
     let windowCheckTimer = null;
     let countdownTimer = null;
     let secondsToClose = 0;
@@ -496,7 +496,7 @@
     const statusMsg = document.getElementById('statusMsg');
 
     // ============================================
-    // NEW: Window / countdown utilities
+    // Window / countdown utilities
     // ============================================
     function formatCountdown(seconds) {
       if (seconds <= 0) return '00:00:00';
@@ -506,10 +506,11 @@
       return [h, m, s].map(function(n) { return String(n).padStart(2, '0'); }).join(':');
     }
 
+    // ---- FIX 1: cache-busting added ----
     function fetchWindowStatus(module) {
-      var url = GAS_URL + '?action=getWindowStatus';
+      var url = GAS_URL + '?action=getWindowStatus&_=' + Date.now();
       if (module) url += '&module=' + encodeURIComponent(module);
-      return fetch(url).then(function(r) { return r.json(); });
+      return fetch(url, { cache: 'no-store' }).then(function(r) { return r.json(); });
     }
 
     function stopWindowTimers() {
@@ -546,13 +547,12 @@
     }
 
     // ============================================
-    // NEW: Check window and show appropriate UI
+    // Check window and show appropriate UI
     // ============================================
     function updateWindowStatus(module) {
       stopWindowTimers();
       return fetchWindowStatus(module).then(function(data) {
         if (!data || !data.success) {
-          // If API fails, just show the login page so users aren't locked out
           hideWindowBanner();
           loginPage.style.display = 'block';
           return;
@@ -563,10 +563,8 @@
           if (puzzlePage.style.display !== 'block') {
             loginPage.style.display = 'block';
           }
-          // If puzzle is open, show the closes-in warning when < 10 min remain
           secondsToClose = data.secondsToClose || 0;
           updateCloseWarning();
-          // Schedule a re-check 30s after close
           if (windowCheckTimer) clearTimeout(windowCheckTimer);
           if (secondsToClose > 0) {
             windowCheckTimer = setTimeout(function() {
@@ -590,13 +588,11 @@
           var info2 = 'बंद होने का समय: ' + formatLocalDisplay(data.closeTime);
           showWindowBanner(data.message, '🔒', info2, true);
         } else {
-          // disabled / unknown → show login
           hideWindowBanner();
           loginPage.style.display = 'block';
         }
       }).catch(function(err) {
         console.error('Window check failed:', err);
-        // Fail-open: show login so users aren't locked out due to network hiccup
         hideWindowBanner();
         loginPage.style.display = 'block';
       });
@@ -604,7 +600,6 @@
 
     function formatLocalDisplay(str) {
       if (!str) return '';
-      // str is like '2026-01-20 09:00:00'
       var m = String(str).match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/);
       if (!m) return str;
       var d = new Date(parseInt(m[1]), parseInt(m[2]) - 1, parseInt(m[3]),
@@ -636,12 +631,13 @@
     }
 
     // ============================================
-    // NEW: Tell server we started (for Start Time)
+    // Tell server we started (Start Time)
+    // ---- FIX 1: cache-busting added ----
     // ============================================
     function startCrosswordOnServer(rollNumber, module) {
-      var url = GAS_URL + '?action=startCrossword&rollNumber=' + encodeURIComponent(rollNumber);
+      var url = GAS_URL + '?action=startCrossword&_=' + Date.now() + '&rollNumber=' + encodeURIComponent(rollNumber);
       if (module) url += '&module=' + encodeURIComponent(module);
-      return fetch(url).then(function(r) { return r.json(); });
+      return fetch(url, { cache: 'no-store' }).then(function(r) { return r.json(); });
     }
 
     // ============================================
@@ -783,6 +779,10 @@
       if (!isSubmitted) doSubmit(true);
     }
 
+    // ============================================
+    // Submit
+    // ---- FIX 1: cache-busting added ----
+    // ============================================
     function doSubmit(isAuto) {
       if (isSubmitted) return;
       var score = calculateScore();
@@ -810,11 +810,11 @@
         duration: elapsed,
         percent: percentage,
         auto: isAuto ? 'yes' : 'no',
-        startTime: crosswordStartTime || '',   // NEW
+        startTime: crosswordStartTime || '',
         grid: JSON.stringify(gridData)
       };
 
-      fetch(GAS_URL + '?action=submitCrossword&payload=' + encodeURIComponent(JSON.stringify(payload)))
+      fetch(GAS_URL + '?action=submitCrossword&_=' + Date.now() + '&payload=' + encodeURIComponent(JSON.stringify(payload)), { cache: 'no-store' })
         .then(function(response) { return response.json(); })
         .then(function(data) {
           if (data.success) {
@@ -827,8 +827,6 @@
             clearGridEntries();
             closeWarning.style.display = 'none';
           } else {
-            // If the server rejected because the link closed, we still mark as submitted
-            // to prevent infinite auto-submit loops.
             if (data.reason === 'closed' || data.reason === 'not_started') {
               isSubmitted = true;
               stopTimer();
@@ -859,6 +857,7 @@
 
     // ============================================
     // Login
+    // ---- FIX 1: cache-busting added to checkRoll ----
     // ============================================
     function handleLogin() {
       var name = userNameInput.value.trim();
@@ -909,8 +908,8 @@
       loginBtn.disabled = true;
       loginBtn.textContent = '⏳ चेक कर रहे हैं...';
 
-      // First: check duplicate roll number
-      fetch(GAS_URL + '?action=checkRoll&rollNumber=' + encodeURIComponent(num))
+      // First: check duplicate roll number (cache-busted)
+      fetch(GAS_URL + '?action=checkRoll&_=' + Date.now() + '&rollNumber=' + encodeURIComponent(num), { cache: 'no-store' })
         .then(function(response) { return response.json(); })
         .then(function(result) {
           if (result.exists) {
@@ -927,7 +926,6 @@
               throw new Error('Window check failed');
             }
             if (!win.open) {
-              // Show the window banner again
               updateWindowStatus(module);
               loginBtn.disabled = false;
               loginBtn.textContent = '▶ शुरू करें';
@@ -970,7 +968,6 @@
 
               startTimer();
 
-              // Refresh close-warning based on latest status
               secondsToClose = win.secondsToClose || 0;
               updateCloseWarning();
 
