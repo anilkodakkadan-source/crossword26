@@ -82,6 +82,45 @@
       display: none;
     }
 
+    /* Window banner (NEW) */
+    #windowBanner {
+      display: none;
+      background: white;
+      border-radius: 30px;
+      padding: 40px 35px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+      max-width: 500px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    #windowBanner h2 {
+      font-size: 22px;
+      color: #1e2b3c;
+      margin-bottom: 15px;
+    }
+    #windowBanner p {
+      color: #4a5f76;
+      font-size: 15px;
+      margin: 8px 0;
+      line-height: 1.5;
+    }
+    #windowBanner .countdown {
+      font-size: 42px;
+      font-weight: 700;
+      color: #1e3a5f;
+      letter-spacing: 3px;
+      margin: 20px 0;
+      font-variant-numeric: tabular-nums;
+    }
+    #windowBanner.closed .countdown { color: #b3363a; }
+    #windowBanner .info {
+      font-size: 13px;
+      color: #6b7c92;
+      margin-top: 15px;
+      border-top: 1px solid #dce5ef;
+      padding-top: 12px;
+    }
+
     /* Puzzle */
     #puzzlePage {
       background: white;
@@ -117,6 +156,20 @@
       border-radius: 30px;
       display: inline-block;
       margin-bottom: 15px;
+    }
+
+    /* Small close-warning banner inside puzzle page */
+    #closeWarning {
+      display: none;
+      background: #fff4e5;
+      border: 1px solid #ffd8a8;
+      color: #8a4b00;
+      padding: 10px 15px;
+      border-radius: 12px;
+      font-size: 14px;
+      margin-bottom: 12px;
+      text-align: center;
+      font-weight: 600;
     }
 
     /* Grid */
@@ -244,14 +297,23 @@
       .header-row h1 { font-size: 18px; }
       .header-row .timer { font-size: 20px; padding: 3px 14px; }
       .clue-item { font-size: 12px; }
+      #windowBanner .countdown { font-size: 32px; }
     }
   </style>
 </head>
 <body>
 <div class="container">
 
+  <!-- Window Banner (NEW) -->
+  <div id="windowBanner">
+    <h2>🧩 शब्द पहेली</h2>
+    <p id="windowMessage"></p>
+    <div class="countdown" id="windowCountdown"></div>
+    <div class="info" id="windowInfo"></div>
+  </div>
+
   <!-- Login Page -->
-  <div id="loginPage">
+  <div id="loginPage" style="display:none;">
     <h1>🧩 शब्द पहेली</h1>
     <p class="sub">व्यक्तिगत प्रतियोगिता · CROSSWORD 2026</p>
 
@@ -323,6 +385,8 @@
       <span style="font-size:12px; color:#4a5f76;">व्यक्तिगत · 30 मिनट</span>
     </div>
 
+    <div id="closeWarning">⏰ <span id="closeWarningText"></span></div>
+
     <div class="grid-container" id="crosswordGrid"></div>
 
     <div class="clue-section">
@@ -344,7 +408,9 @@
     // ===== YOUR GAS URL =====
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbzT8a-dgkOfVFgyNHEls7iOkfgOuPrq27nv0QG6OEM7e0U4JNLftsEGNIsf8AjzCNHW/exec';
 
+    // ============================================
     // Crossword Data
+    // ============================================
     const clues = {
       across: [
         { no: 1, text: "CHANGE (5)", answer: "परिवर्तन" },
@@ -397,6 +463,19 @@
     let timeSeconds = 1800;
     let isSubmitted = false, isTimerEnded = false;
 
+    // ---- NEW: window / start time tracking ----
+    let crosswordStartTime = null;   // ISO string from server
+    let windowCheckTimer = null;
+    let countdownTimer = null;
+    let secondsToClose = 0;
+
+    const windowBanner = document.getElementById('windowBanner');
+    const windowMessage = document.getElementById('windowMessage');
+    const windowCountdown = document.getElementById('windowCountdown');
+    const windowInfo = document.getElementById('windowInfo');
+    const closeWarning = document.getElementById('closeWarning');
+    const closeWarningText = document.getElementById('closeWarningText');
+
     const loginPage = document.getElementById('loginPage');
     const puzzlePage = document.getElementById('puzzlePage');
     const userNameInput = document.getElementById('userName');
@@ -416,12 +495,164 @@
     const submitBtn = document.getElementById('submitBtn');
     const statusMsg = document.getElementById('statusMsg');
 
+    // ============================================
+    // NEW: Window / countdown utilities
+    // ============================================
+    function formatCountdown(seconds) {
+      if (seconds <= 0) return '00:00:00';
+      var h = Math.floor(seconds / 3600);
+      var m = Math.floor((seconds % 3600) / 60);
+      var s = seconds % 60;
+      return [h, m, s].map(function(n) { return String(n).padStart(2, '0'); }).join(':');
+    }
+
+    function fetchWindowStatus(module) {
+      var url = GAS_URL + '?action=getWindowStatus';
+      if (module) url += '&module=' + encodeURIComponent(module);
+      return fetch(url).then(function(r) { return r.json(); });
+    }
+
+    function stopWindowTimers() {
+      if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
+    }
+
+    function showWindowBanner(message, countdownText, infoText, isClosed) {
+      windowBanner.style.display = 'block';
+      loginPage.style.display = 'none';
+      puzzlePage.style.display = 'none';
+      windowMessage.textContent = message || '';
+      windowCountdown.textContent = countdownText || '';
+      windowInfo.textContent = infoText || '';
+      windowBanner.classList.toggle('closed', !!isClosed);
+    }
+
+    function hideWindowBanner() {
+      windowBanner.style.display = 'none';
+    }
+
+    function runCountdown(initialSeconds, onTick, onDone) {
+      if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
+      var remaining = initialSeconds;
+      if (onTick) onTick(remaining);
+      countdownTimer = setInterval(function() {
+        remaining -= 1;
+        if (onTick) onTick(remaining);
+        if (remaining <= 0) {
+          clearInterval(countdownTimer);
+          countdownTimer = null;
+          if (onDone) onDone();
+        }
+      }, 1000);
+    }
+
+    // ============================================
+    // NEW: Check window and show appropriate UI
+    // ============================================
+    function updateWindowStatus(module) {
+      stopWindowTimers();
+      return fetchWindowStatus(module).then(function(data) {
+        if (!data || !data.success) {
+          // If API fails, just show the login page so users aren't locked out
+          hideWindowBanner();
+          loginPage.style.display = 'block';
+          return;
+        }
+
+        if (data.open) {
+          hideWindowBanner();
+          if (puzzlePage.style.display !== 'block') {
+            loginPage.style.display = 'block';
+          }
+          // If puzzle is open, show the closes-in warning when < 10 min remain
+          secondsToClose = data.secondsToClose || 0;
+          updateCloseWarning();
+          // Schedule a re-check 30s after close
+          if (windowCheckTimer) clearTimeout(windowCheckTimer);
+          if (secondsToClose > 0) {
+            windowCheckTimer = setTimeout(function() {
+              updateWindowStatus(userModule);
+            }, Math.min(30000, (secondsToClose + 2) * 1000));
+          }
+          return;
+        }
+
+        // NOT OPEN
+        if (data.reason === 'not_started') {
+          var info = 'खुलने का समय: ' + formatLocalDisplay(data.openTime);
+          showWindowBanner(data.message, formatCountdown(data.secondsToOpen), info, false);
+
+          runCountdown(
+            data.secondsToOpen,
+            function(remaining) { windowCountdown.textContent = formatCountdown(remaining); },
+            function() { updateWindowStatus(userModule); }
+          );
+        } else if (data.reason === 'closed') {
+          var info2 = 'बंद होने का समय: ' + formatLocalDisplay(data.closeTime);
+          showWindowBanner(data.message, '🔒', info2, true);
+        } else {
+          // disabled / unknown → show login
+          hideWindowBanner();
+          loginPage.style.display = 'block';
+        }
+      }).catch(function(err) {
+        console.error('Window check failed:', err);
+        // Fail-open: show login so users aren't locked out due to network hiccup
+        hideWindowBanner();
+        loginPage.style.display = 'block';
+      });
+    }
+
+    function formatLocalDisplay(str) {
+      if (!str) return '';
+      // str is like '2026-01-20 09:00:00'
+      var m = String(str).match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/);
+      if (!m) return str;
+      var d = new Date(parseInt(m[1]), parseInt(m[2]) - 1, parseInt(m[3]),
+                       parseInt(m[4]), parseInt(m[5]));
+      var opts = { day: '2-digit', month: 'short', year: 'numeric',
+                   hour: '2-digit', minute: '2-digit', hour12: true };
+      return d.toLocaleString('en-IN', opts);
+    }
+
+    function updateCloseWarning() {
+      if (secondsToClose > 0 && secondsToClose < 600 && puzzlePage.style.display === 'block' && !isSubmitted) {
+        closeWarning.style.display = 'block';
+        var remaining = secondsToClose;
+        if (closeWarning._timer) clearInterval(closeWarning._timer);
+        var tick = function() {
+          closeWarningText.textContent = 'यह लिंक ' + formatCountdown(remaining) + ' में बंद हो जाएगा';
+          remaining--;
+          if (remaining < 0) {
+            clearInterval(closeWarning._timer);
+            closeWarning._timer = null;
+            closeWarningText.textContent = 'लिंक बंद हो गया। कृपया सबमिट करें।';
+          }
+        };
+        tick();
+        closeWarning._timer = setInterval(tick, 1000);
+      } else {
+        closeWarning.style.display = 'none';
+      }
+    }
+
+    // ============================================
+    // NEW: Tell server we started (for Start Time)
+    // ============================================
+    function startCrosswordOnServer(rollNumber, module) {
+      var url = GAS_URL + '?action=startCrossword&rollNumber=' + encodeURIComponent(rollNumber);
+      if (module) url += '&module=' + encodeURIComponent(module);
+      return fetch(url).then(function(r) { return r.json(); });
+    }
+
+    // ============================================
+    // Grid / clues / scoring
+    // ============================================
     function buildEmptyGrid() {
-      const grid = [];
-      for (let r = 0; r < ROWS; r++) {
-        const row = [];
-        for (let c = 0; c < COLS; c++) {
-          const isBlock = (solvedGrid[r] && solvedGrid[r][c] === '');
+      var grid = [];
+      for (var r = 0; r < ROWS; r++) {
+        var row = [];
+        for (var c = 0; c < COLS; c++) {
+          var isBlock = (solvedGrid[r] && solvedGrid[r][c] === '');
           row.push({
             value: '',
             block: isBlock,
@@ -579,6 +810,7 @@
         duration: elapsed,
         percent: percentage,
         auto: isAuto ? 'yes' : 'no',
+        startTime: crosswordStartTime || '',   // NEW
         grid: JSON.stringify(gridData)
       };
 
@@ -593,8 +825,21 @@
             for (var i = 0; i < inputs.length; i++) inputs[i].disabled = true;
             showStatus('✅ सफलपूर्वक सबमिट कर दिया। हार्दिक शुभकामनाएं !!', 'success');
             clearGridEntries();
+            closeWarning.style.display = 'none';
           } else {
-            showStatus('❌ जमा करने में त्रुटि: ' + (data.error || 'Unknown'), 'error');
+            // If the server rejected because the link closed, we still mark as submitted
+            // to prevent infinite auto-submit loops.
+            if (data.reason === 'closed' || data.reason === 'not_started') {
+              isSubmitted = true;
+              stopTimer();
+              submitBtn.disabled = true;
+              var inputs2 = document.querySelectorAll('#crosswordGrid input');
+              for (var j = 0; j < inputs2.length; j++) inputs2[j].disabled = true;
+              showStatus('❌ ' + (data.error || 'लिंक बंद है'), 'error');
+              closeWarning.style.display = 'none';
+            } else {
+              showStatus('❌ जमा करने में त्रुटि: ' + (data.error || 'Unknown'), 'error');
+            }
           }
         })
         .catch(function(err) {
@@ -612,6 +857,9 @@
       renderGrid();
     }
 
+    // ============================================
+    // Login
+    // ============================================
     function handleLogin() {
       var name = userNameInput.value.trim();
       var designation = userDesignationInput.value.trim();
@@ -661,6 +909,7 @@
       loginBtn.disabled = true;
       loginBtn.textContent = '⏳ चेक कर रहे हैं...';
 
+      // First: check duplicate roll number
       fetch(GAS_URL + '?action=checkRoll&rollNumber=' + encodeURIComponent(num))
         .then(function(response) { return response.json(); })
         .then(function(result) {
@@ -671,31 +920,64 @@
             loginBtn.textContent = '▶ शुरू करें';
             return;
           }
-          userName = name;
-          userDesignation = designation;
-          userOffice = office;
-          userMobile = mobile;
-          userNumber = num;
-          userModule = module;
-          userMotherTongue = motherTongue;
 
-          userBadge.innerHTML = '👤 ' + userName + ' (Emp: ' + userNumber + ')';
+          // Second: check window (with module for per-module close time)
+          return fetchWindowStatus(module).then(function(win) {
+            if (!win || !win.success) {
+              throw new Error('Window check failed');
+            }
+            if (!win.open) {
+              // Show the window banner again
+              updateWindowStatus(module);
+              loginBtn.disabled = false;
+              loginBtn.textContent = '▶ शुरू करें';
+              return;
+            }
 
-          currentGrid = buildEmptyGrid();
-          isSubmitted = false;
-          isTimerEnded = false;
-          hideStatus();
-          submitBtn.disabled = false;
-          renderClues();
-          renderGrid();
+            // Third: tell server we started (records Start Time)
+            return startCrosswordOnServer(num, module).then(function(startRes) {
+              if (!startRes || !startRes.success) {
+                loginError.textContent = '❌ ' + (startRes && startRes.error ? startRes.error : 'शुरू नहीं हो सका');
+                loginError.style.display = 'block';
+                loginBtn.disabled = false;
+                loginBtn.textContent = '▶ शुरू करें';
+                return;
+              }
 
-          loginPage.style.display = 'none';
-          puzzlePage.style.display = 'block';
+              crosswordStartTime = startRes.startTime || new Date().toISOString();
 
-          startTimer();
+              // Save user data
+              userName = name;
+              userDesignation = designation;
+              userOffice = office;
+              userMobile = mobile;
+              userNumber = num;
+              userModule = module;
+              userMotherTongue = motherTongue;
 
-          loginBtn.disabled = false;
-          loginBtn.textContent = '▶ शुरू करें';
+              userBadge.innerHTML = '👤 ' + userName + ' (Emp: ' + userNumber + ')';
+
+              currentGrid = buildEmptyGrid();
+              isSubmitted = false;
+              isTimerEnded = false;
+              hideStatus();
+              submitBtn.disabled = false;
+              renderClues();
+              renderGrid();
+
+              loginPage.style.display = 'none';
+              puzzlePage.style.display = 'block';
+
+              startTimer();
+
+              // Refresh close-warning based on latest status
+              secondsToClose = win.secondsToClose || 0;
+              updateCloseWarning();
+
+              loginBtn.disabled = false;
+              loginBtn.textContent = '▶ शुरू करें';
+            });
+          });
         })
         .catch(function(err) {
           loginError.textContent = '❌ त्रुटि: ' + err.message;
@@ -712,6 +994,12 @@
     submitBtn.addEventListener('click', function() { doSubmit(false); });
 
     renderClues();
+
+    // ============================================
+    // Initial: check window on load
+    // ============================================
+    updateWindowStatus();
+
   })();
 </script>
 </body>
